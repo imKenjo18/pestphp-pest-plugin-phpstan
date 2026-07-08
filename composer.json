@@ -1,6 +1,17 @@
 {
     "name": "pestphp/pest-plugin-phpstan",
-    "description": "PHPStan extension for Pest PHP testing framework",
+    "description": "PHPStan plugin for Pest",
+    "keywords": [
+        "php",
+        "framework",
+        "pest",
+        "unit",
+        "test",
+        "testing",
+        "plugin",
+        "phpstan"
+    ],
+    "license": "MIT",
     "type": "phpstan-extension",
     "license": "MIT",
     "keywords": ["phpstan", "pest", "testing", "static-analysis"],
