@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 it('reports only the first impossible assertion in a broken chain', function (): void {
-    expect(123)->toBeString()->toBeArray(); // line 6
+    expect(123)->toBeString()->toBeArray();
 });
 
 it('suppresses impossible assertions after an invalid matcher requirement', function (): void {

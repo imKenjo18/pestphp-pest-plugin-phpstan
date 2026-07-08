@@ -17,16 +17,11 @@ abstract class RuleTestCase extends RuleTestCaseCore
      */
     public static array $additionalConfigFiles = [];
 
-    protected function getRule(): Rule
-    {
-        return self::$rule;
-    }
-
     /**
      * @return string[]
      */
     #[Override]
-    public static function getAdditionalConfigFiles(): array
+    final public static function getAdditionalConfigFiles(): array
     {
         return self::$additionalConfigFiles;
     }
@@ -34,8 +29,13 @@ abstract class RuleTestCase extends RuleTestCaseCore
     /**
      * @param  class-string<Rule>  $ruleClass
      */
-    public static function resolveRule(string $ruleClass): Rule
+    final public static function resolveRule(string $ruleClass): Rule
     {
         return self::getContainer()->getByType($ruleClass);
+    }
+
+    protected function getRule(): Rule
+    {
+        return self::$rule;
     }
 }

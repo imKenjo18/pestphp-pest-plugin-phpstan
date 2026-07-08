@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use Pest\Expectation;
 use Pest\Mixins\Expectation as MixinsExpectation;
-use PestStan\Analysis\Expectation\ExpectationMatcherRegistry;
-use PestStan\Analysis\Expectation\ExpectationTypeNarrower;
+use Pest\PHPStan\Analysis\Expectation\ExpectationMatcherRegistry;
+use Pest\PHPStan\Analysis\Expectation\ExpectationTypeNarrower;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -15,9 +15,6 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
 
-/**
- * Fixes return types for assertion methods on Pest\Mixins\Expectation.
- */
 final class ExpectationMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     private readonly ExpectationMatcherRegistry $matcherRegistry;

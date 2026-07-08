@@ -9,18 +9,18 @@ use stdClass;
 use Throwable;
 
 it('stdClass cannot satisfy countable interface', function (): void {
-    expect(new stdClass)->toBeInstanceOf(Countable::class); // line 14
+    expect(new stdClass)->toBeInstanceOf(Countable::class);
 });
 
 it('runtime exception cannot be countable', function (): void {
-    expect(new RuntimeException)->toBeInstanceOf(Countable::class); // line 18
+    expect(new RuntimeException)->toBeInstanceOf(Countable::class);
 });
 
 it('bool cannot be numeric', function (): void {
     /** @var bool $value */
     $value = getValue();
 
-    expect($value)->toBeNumeric(); // line 23
+    expect($value)->toBeNumeric();
 });
 
 it('unrelated interfaces are not proven impossible', function (): void {

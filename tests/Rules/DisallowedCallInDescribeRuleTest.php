@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Rules;
 
-use PestStan\Rules\DisallowedCallInDescribeRule;
+use Pest\PHPStan\Rules\DisallowedCallInDescribeRule;
 use Tests\RuleTestCase;
 
 beforeAll(function (): void {
     RuleTestCase::$rule = new DisallowedCallInDescribeRule;
     RuleTestCase::$additionalConfigFiles = [
-        __DIR__ . '/../extension.neon',
+        __DIR__.'/../extension.neon',
     ];
 });
 
 test('before all in describe is reported', function (): void {
     $this->analyse([
-        __DIR__ . '/data/disallowed-call-in-describe.php',
+        __DIR__.'/data/disallowed-call-in-describe.php',
     ], [
         [
             'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
@@ -24,15 +24,15 @@ test('before all in describe is reported', function (): void {
         ],
         [
             'afterAll() cannot be used inside describe() blocks. Use afterEach() instead.',
-            16,
+            15,
         ],
         [
             'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
-            26,
+            24,
         ],
         [
             'afterAll() cannot be used inside describe() blocks. Use afterEach() instead.',
-            29,
+            26,
         ],
     ]);
 });

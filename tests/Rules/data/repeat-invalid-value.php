@@ -2,17 +2,12 @@
 
 declare(strict_types=1);
 
-// Error: repeat with 0
 it('repeat zero', function (): void {
     expect(true)->toBeTrue();
-})->repeat(0); // line 8
-
-// Error: repeat with negative
+})->repeat(0);
 it('repeat negative', function (): void {
     expect(true)->toBeTrue();
-})->repeat(-1); // line 13
-
-// Valid: repeat with positive values
+})->repeat(-1);
 it('repeat once', function (): void {
     expect(true)->toBeTrue();
 })->repeat(1);

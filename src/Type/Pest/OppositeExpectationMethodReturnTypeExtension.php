@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use Pest\Expectation;
 use Pest\Expectations\OppositeExpectation;
@@ -14,11 +14,6 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
 
-/**
- * Fixes return types for assertion methods on Pest\Expectations\OppositeExpectation,
- * ensuring chained ->not accesses resolve to Pest\Expectation<TValue> instead of
- * Pest\Mixins\Expectation<mixed>.
- */
 final class OppositeExpectationMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     public function getClass(): string

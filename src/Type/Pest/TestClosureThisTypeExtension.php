@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
@@ -14,9 +14,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Determines the $this type for closures passed to Pest test functions.
- */
 final class TestClosureThisTypeExtension implements FunctionParameterClosureThisExtension
 {
     private const PEST_TEST_FUNCTIONS = [

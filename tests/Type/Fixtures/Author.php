@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Type\Fixtures;
 
-class Author
+final class Author
 {
     public string $name;
 

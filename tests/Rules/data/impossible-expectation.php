@@ -2,64 +2,62 @@
 
 declare(strict_types=1);
 
-// Errors: impossible type assertions
 it('int cannot be string', function (): void {
-    expect(42)->toBeString(); // line 7
+    expect(42)->toBeString();
 });
 
 it('string cannot be int', function (): void {
-    expect('hello')->toBeInt(); // line 11
+    expect('hello')->toBeInt();
 });
 
 it('string cannot be float', function (): void {
-    expect('hello')->toBeFloat(); // line 15
+    expect('hello')->toBeFloat();
 });
 
 it('string cannot be bool', function (): void {
-    expect('hello')->toBeBool(); // line 19
+    expect('hello')->toBeBool();
 });
 
 it('int cannot be true', function (): void {
-    expect(42)->toBeTrue(); // line 23
+    expect(42)->toBeTrue();
 });
 
 it('int cannot be false', function (): void {
-    expect(42)->toBeFalse(); // line 27
+    expect(42)->toBeFalse();
 });
 
 it('string cannot be null', function (): void {
-    expect('hello')->toBeNull(); // line 31
+    expect('hello')->toBeNull();
 });
 
 it('string cannot be array', function (): void {
-    expect('hello')->toBeArray(); // line 35
+    expect('hello')->toBeArray();
 });
 
 it('int cannot be object', function (): void {
-    expect(42)->toBeObject(); // line 39
+    expect(42)->toBeObject();
 });
 
 it('int cannot be iterable', function (): void {
-    expect(42)->toBeIterable(); // line 43
+    expect(42)->toBeIterable();
 });
 
 it('null cannot be callable', function (): void {
-    expect()->toBeCallable(); // line 47
+    expect()->toBeCallable();
 });
 
 it('int cannot be instance of stdClass', function (): void {
-    expect(42)->toBeInstanceOf(stdClass::class); // line 51
+    expect(42)->toBeInstanceOf(stdClass::class);
 });
 
 it('array cannot be scalar', function (): void {
-    expect([])->toBeScalar(); // line 55
+    expect([])->toBeScalar();
 });
 
 it('null cannot be numeric', function (): void {
-    expect()->toBeNumeric(); // line 59
+    expect()->toBeNumeric();
 });
 
-// Valid: compatible type assertions
 it('string is string', function (): void {
     expect('hello')->toBeString();
 });

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
 use Pest\PendingCalls\TestCall;
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -16,8 +16,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 
 /**
- * Detects repeat() calls with a value less than 1.
- *
  * @implements Rule<MethodCall>
  */
 final class RepeatWithInvalidValueRule implements Rule

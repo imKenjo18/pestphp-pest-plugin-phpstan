@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -20,9 +20,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 
-/**
- * Parses test files and Pest.php config files to extract dynamic property expressions from beforeEach hooks.
- */
 final class PestHookPropertyReader
 {
     private const HOOK_FUNCTIONS = ['beforeEach'];
@@ -40,8 +37,6 @@ final class PestHookPropertyReader
     ) {}
 
     /**
-     * Returns property expressions from hook closures for the given file, to be resolved via Scope::getType().
-     *
      * @return array<string, list<Expr>>
      */
     public function getPropertyExprs(string $filePath): array
@@ -63,8 +58,6 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Resolves directory-scoped properties from Pest.php beforeEach hooks.
-     *
      * @return array<string, list<Expr>>
      */
     private function resolveDirectoryProperties(string $filePath): array
@@ -79,7 +72,7 @@ final class PestHookPropertyReader
                 continue;
             }
 
-            $dirLength = strlen($directory);
+            $dirLength = mb_strlen($directory);
             if ($dirLength > $bestLength) {
                 $bestMatch = $properties;
                 $bestLength = $dirLength;
@@ -104,9 +97,6 @@ final class PestHookPropertyReader
         }
     }
 
-    /**
-     * Parses a Pest.php config file to extract beforeEach property assignments from uses() chains.
-     */
     private function parsePestConfigFile(string $filePath): void
     {
         $parsed = $this->fileDiscoverer->parseFile($filePath);
@@ -122,15 +112,12 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Extracts property expressions from uses()->beforeEach(Closure)->in() chains
-     * and stores them under the directory of the Pest.php file.
-     *
      * @param  Node[]  $stmts
      * @param  array<string, string>  $useMap
      */
     private function extractUsesBeforeEachProperties(NodeFinder $nodeFinder, array $stmts, array $useMap, string $pestFilePath): void
     {
-        $directoryPath = $this->fileDiscoverer->normalizePath(dirname($pestFilePath)) . '/';
+        $directoryPath = $this->fileDiscoverer->normalizePath(dirname($pestFilePath)).'/';
 
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $nodeFinder->findInstanceOf($stmts, MethodCall::class);
@@ -162,8 +149,6 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Merges source property expressions into the target map.
-     *
      * @param  array<string, list<Expr>>  $target
      * @param  array<string, list<Expr>>  $source
      */
@@ -174,9 +159,6 @@ final class PestHookPropertyReader
         }
     }
 
-    /**
-     * Checks if the expression is part of a uses(), pest()->extend(), or pest()->use() call chain.
-     */
     private function isUsesChain(Expr $expr): bool
     {
         if ($expr instanceof FuncCall) {
@@ -197,8 +179,6 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Parses a test file to extract property expressions from hook closures.
-     *
      * @return array<string, list<Expr>>
      */
     private function parseTestFile(string $filePath): array
@@ -242,8 +222,6 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Extracts $this->prop = expr assignments from a hook closure.
-     *
      * @param  array<string, string>  $useMap
      * @return array<string, list<Expr>>
      */
@@ -382,8 +360,6 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Builds a New_ node for a class type name resolved through the use map.
-     *
      * @param  array<string, string>  $useMap
      */
     private function buildSyntheticExprFromTypeName(string $typeName, array $useMap): ?Expr
@@ -391,7 +367,7 @@ final class PestHookPropertyReader
         $fqcn = $useMap[$typeName] ?? $typeName;
 
         $builtIns = ['string', 'int', 'float', 'bool', 'null', 'array', 'object', 'mixed', 'void', 'never'];
-        if (in_array(strtolower($fqcn), $builtIns, true)) {
+        if (in_array(mb_strtolower($fqcn), $builtIns, true)) {
             return null;
         }
 

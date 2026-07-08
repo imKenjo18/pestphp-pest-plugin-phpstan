@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Analysis\Expectation;
+namespace Pest\PHPStan\Analysis\Expectation;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -70,19 +70,11 @@ final class ExpectationMatcherRegistry
         return $this->metadataFor($methodName)?->requirement;
     }
 
-    /**
-     * Compatibility wrapper retained for older callers that still ask for
-     * impossible matcher semantics through the pre-semantic registry API.
-     */
     public function impossibleOnType(string $methodName): ?string
     {
         return $this->metadataFor($methodName)?->assertion;
     }
 
-    /**
-     * Compatibility wrapper retained for older callers that still ask for
-     * redundant matcher semantics through the pre-semantic registry API.
-     */
     public function redundantOnType(string $methodName): ?string
     {
         return $this->metadataFor($methodName)?->assertion;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
-use PestStan\PestFunctionDetector;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\PestFunctionDetector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -17,8 +17,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Detects beforeAll() and afterAll() calls inside describe() blocks, including nested describes.
- *
  * @implements Rule<FuncCall>
  */
 final class DisallowedCallInDescribeRule implements Rule
@@ -52,8 +50,6 @@ final class DisallowedCallInDescribeRule implements Rule
     }
 
     /**
-     * Recursively collects forbidden calls in a describe closure and nested describe closures.
-     *
      * @return list<IdentifierRuleError>
      */
     private function collectForbiddenCalls(Closure $closure): array

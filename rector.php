@@ -9,14 +9,14 @@ use RectorPest\Set\PestSetList;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__.'/src',
+        __DIR__.'/tests',
     ])
     ->withRootFiles()
     ->withSkip([
         ReadOnlyClassRector::class,
-        __DIR__ . '/tests/Type/data',
-        __DIR__ . '/tests/Rules/data',
+        __DIR__.'/tests/Type/data',
+        __DIR__.'/tests/Rules/data',
     ])
     ->withSets([
         PestLevelSetList::UP_TO_PEST_30,

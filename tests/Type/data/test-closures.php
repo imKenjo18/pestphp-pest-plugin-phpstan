@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TestClosures;
 
-use function PHPStan\Testing\assertType;
-
 use PHPUnit\Framework\TestCase;
+
+use function PHPStan\Testing\assertType;
 
 function testThisTypeInIt(): void
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Type;
 
-use PestStan\Type\Pest\PestConfigReader;
-use PestStan\Type\Pest\PestFileDiscoverer;
+use Pest\PHPStan\Type\Pest\PestConfigReader;
+use Pest\PHPStan\Type\Pest\PestFileDiscoverer;
 use RuntimeException;
 use Tests\Rules\Fixtures\DynamicTrait;
 use Tests\Rules\Fixtures\MixedDynamicTrait;
@@ -15,7 +15,7 @@ use Tests\Type\Fixtures\CustomTestCase;
 use Tests\Type\Fixtures\HelperTrait;
 
 $makeReader = static function (): array {
-    $fixtureDir = realpath(__DIR__ . '/Fixtures/pestconfig');
+    $fixtureDir = realpath(__DIR__.'/Fixtures/pestconfig');
 
     if ($fixtureDir === false) {
         throw new RuntimeException('Fixture directory not found.');
@@ -29,7 +29,7 @@ $makeReader = static function (): array {
 test('resolves extend binding for feature directory', function () use ($makeReader): void {
     [$fixtureDir, $reader] = $makeReader();
 
-    $bindings = $reader->resolveBindings($fixtureDir . '/Feature/SomeTest.php');
+    $bindings = $reader->resolveBindings($fixtureDir.'/Feature/SomeTest.php');
 
     expect($bindings)->toContain(CustomTestCase::class);
 });
@@ -37,7 +37,7 @@ test('resolves extend binding for feature directory', function () use ($makeRead
 test('resolves extend binding for unit directory', function () use ($makeReader): void {
     [$fixtureDir, $reader] = $makeReader();
 
-    $bindings = $reader->resolveBindings($fixtureDir . '/Unit/SomeTest.php');
+    $bindings = $reader->resolveBindings($fixtureDir.'/Unit/SomeTest.php');
 
     expect($bindings)->toContain(CustomTestCase::class);
 });
@@ -45,7 +45,7 @@ test('resolves extend binding for unit directory', function () use ($makeReader)
 test('resolves use binding for helpers subdirectory', function () use ($makeReader): void {
     [$fixtureDir, $reader] = $makeReader();
 
-    $bindings = $reader->resolveBindings($fixtureDir . '/Feature/Helpers/SomeTest.php');
+    $bindings = $reader->resolveBindings($fixtureDir.'/Feature/Helpers/SomeTest.php');
 
     expect($bindings)->toContain(HelperTrait::class);
 });
@@ -53,7 +53,7 @@ test('resolves use binding for helpers subdirectory', function () use ($makeRead
 test('accumulates parent and subdirectory bindings', function () use ($makeReader): void {
     [$fixtureDir, $reader] = $makeReader();
 
-    $bindings = $reader->resolveBindings($fixtureDir . '/Feature/Helpers/SomeTest.php');
+    $bindings = $reader->resolveBindings($fixtureDir.'/Feature/Helpers/SomeTest.php');
 
     expect($bindings)
         ->toContain(CustomTestCase::class)
@@ -69,24 +69,24 @@ test('returns empty for unmatched path', function () use ($makeReader): void {
 });
 
 test('resolves statically known global uses and skips dynamic paths', function (): void {
-    $fixtureDir = realpath(__DIR__ . '/../Rules/data/redundant-local-use');
+    $fixtureDir = realpath(__DIR__.'/../Rules/data/redundant-local-use');
     if ($fixtureDir === false) {
         throw new RuntimeException('Redundant local use fixture directory not found.');
     }
 
     $reader = new PestConfigReader([], new PestFileDiscoverer([$fixtureDir]));
-    $bindings = $reader->resolveGlobalUses($fixtureDir . '/Feature/uses.php');
+    $bindings = $reader->resolveGlobalUses($fixtureDir.'/Feature/uses.php');
 
     expect(array_column($bindings, 'class'))
         ->toContain(RefreshDatabase::class)
         ->not->toContain(CustomTestCase::class)
         ->not->toContain(DynamicTrait::class)
         ->not->toContain(MixedDynamicTrait::class)
-        ->and($reader->resolveBindings($fixtureDir . '/Feature/uses.php'))->toContain(CustomTestCase::class)
+        ->and($reader->resolveBindings($fixtureDir.'/Feature/uses.php'))->toContain(CustomTestCase::class)
         ->toContain(RefreshDatabase::class)
-        ->and(array_column($reader->resolveGlobalUses($fixtureDir . '/PluralFeature/multiple.php'), 'class'))
+        ->and(array_column($reader->resolveGlobalUses($fixtureDir.'/PluralFeature/multiple.php'), 'class'))
         ->toContain(OtherTrait::class)
         ->not->toContain(CustomTestCase::class)
-        ->and(array_column($reader->resolveGlobalUses($fixtureDir . '/StandaloneFeature/uses.php'), 'class'))
+        ->and(array_column($reader->resolveGlobalUses($fixtureDir.'/StandaloneFeature/uses.php'), 'class'))
         ->toContain(DynamicTrait::class);
 });

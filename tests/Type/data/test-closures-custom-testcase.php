@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TestClosuresCustomTestCase;
 
-use function PHPStan\Testing\assertType;
-
 use Tests\Type\Fixtures\CustomTestCase;
+
+use function PHPStan\Testing\assertType;
 
 function testThisTypeInItWithCustomTestCase(): void
 {

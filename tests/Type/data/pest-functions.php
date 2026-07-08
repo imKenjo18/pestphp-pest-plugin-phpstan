@@ -10,10 +10,9 @@ use Pest\PendingCalls\BeforeEachCall;
 use Pest\PendingCalls\DescribeCall;
 use Pest\PendingCalls\TestCall;
 use Pest\PendingCalls\UsesCall;
+use PHPUnit\Framework\TestCase;
 
 use function PHPStan\Testing\assertType;
-
-use PHPUnit\Framework\TestCase;
 
 function testUsesReturnType(): void
 {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ExpectFunction;
 
-use function PHPStan\Testing\assertType;
-
 use stdClass;
+
+use function PHPStan\Testing\assertType;
 
 function testExpectWithStringLiteral(): void
 {

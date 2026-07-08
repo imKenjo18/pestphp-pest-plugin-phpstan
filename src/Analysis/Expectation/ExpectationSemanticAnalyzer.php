@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Analysis\Expectation;
+namespace Pest\PHPStan\Analysis\Expectation;
 
-use PestStan\Diagnostics\PestDiagnostic;
-use PestStan\Diagnostics\PestDiagnostics;
+use Pest\PHPStan\Diagnostics\PestDiagnostic;
+use Pest\PHPStan\Diagnostics\PestDiagnostics;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\VerbosityLevel;

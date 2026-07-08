@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use Pest\Configuration;
 use Pest\Expectation;
@@ -21,9 +21,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
-/**
- * Provides proper return types for Pest's global functions.
- */
 final class PestFunctionReturnTypeExtension implements DynamicFunctionReturnTypeExtension
 {
     /** @var array<string, class-string> Maps function names to return class names */

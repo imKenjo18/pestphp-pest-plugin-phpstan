@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Analysis\Expectation;
+namespace Pest\PHPStan\Analysis\Expectation;
 
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
@@ -101,7 +101,7 @@ final class ExpectationTypeNarrower
 
     private function cacheKey(Type $incomingValueType, Type $expectedValueType): string
     {
-        return spl_object_id($incomingValueType) . ':' . spl_object_id($expectedValueType);
+        return spl_object_id($incomingValueType).':'.spl_object_id($expectedValueType);
     }
 
     private function narrowSingleType(Type $incomingValueType, Type $expectedValueType): Type

@@ -6,10 +6,9 @@ namespace ExpectationMethods;
 
 use ArrayIterator;
 use Pest\Mixins\Expectation;
+use stdClass;
 
 use function PHPStan\Testing\assertType;
-
-use stdClass;
 
 function testExpectReturnType(): void
 {
@@ -250,9 +249,9 @@ function testToBeListNarrows(): void
 
 interface NamedEntity {}
 
-class Person implements NamedEntity {}
+final class Person implements NamedEntity {}
 
-class Employee extends Person {}
+final class Employee extends Person {}
 
 function getEmployeeOrString(): Person|string
 {

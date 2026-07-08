@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace HigherOrderExpectations;
 
-use function PHPStan\Testing\assertType;
-
 use Tests\Type\Fixtures\Post;
+
+use function PHPStan\Testing\assertType;
 
 function testPropertyAccessOnExpectation(): void
 {

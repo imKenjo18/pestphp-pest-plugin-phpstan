@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
-use PestStan\PestFunctionDetector;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\PestFunctionDetector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -15,8 +15,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Detects duplicate test descriptions in the same file (top-level only).
- *
  * @implements Rule<FuncCall>
  */
 final class DuplicateTestDescriptionRule implements Rule
@@ -53,7 +51,7 @@ final class DuplicateTestDescriptionRule implements Rule
 
         $funcName = $node->name->toString();
         if ($funcName === 'it') {
-            $description = 'it ' . $description;
+            $description = 'it '.$description;
         }
 
         $file = $scope->getFile();

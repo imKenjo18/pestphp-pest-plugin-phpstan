@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Type\Fixtures;
 
-class Post
+final class Post
 {
     public string $title;
 
@@ -16,6 +16,6 @@ class Post
 
     public static function make(): static
     {
-        return new static;
+        return new self;
     }
 }

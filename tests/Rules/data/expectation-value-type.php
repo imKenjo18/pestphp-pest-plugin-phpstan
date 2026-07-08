@@ -2,51 +2,46 @@
 
 declare(strict_types=1);
 
-// Errors: each() on non-iterable
 it('each on int', function (): void {
-    expect(42)->each(); // line 7
+    expect(42)->each();
 });
 
 it('each on string', function (): void {
-    expect('hello')->each(); // line 11
+    expect('hello')->each();
 });
 
-// Errors: sequence() on non-iterable
 it('sequence on int', function (): void {
-    expect(42)->sequence(fn ($item) => $item->toBe(1)); // line 16
+    expect(42)->sequence(fn ($item) => $item->toBe(1));
 });
 
-// Errors: json() on non-string
 it('json on int', function (): void {
-    expect(42)->json(); // line 21
+    expect(42)->json();
 });
 
 it('json on array', function (): void {
-    expect([1, 2])->json(); // line 25
+    expect([1, 2])->json();
 });
 
-// Errors: string methods on non-string
 it('toStartWith on int', function (): void {
-    expect(42)->toStartWith('he'); // line 30
+    expect(42)->toStartWith('he');
 });
 
 it('toEndWith on int', function (): void {
-    expect(42)->toEndWith('lo'); // line 34
+    expect(42)->toEndWith('lo');
 });
 
 it('toBeJson on int', function (): void {
-    expect(42)->toBeJson(); // line 38
+    expect(42)->toBeJson();
 });
 
 it('toBeFile on int', function (): void {
-    expect(42)->toBeFile(); // line 42
+    expect(42)->toBeFile();
 });
 
 it('toBeDirectory on int', function (): void {
-    expect(42)->toBeDirectory(); // line 46
+    expect(42)->toBeDirectory();
 });
 
-// Valid: compatible types
 it('each on array', function (): void {
     expect([1, 2, 3])->each();
 });

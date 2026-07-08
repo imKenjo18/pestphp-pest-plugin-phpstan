@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Diagnostics;
+namespace Pest\PHPStan\Diagnostics;
 
-use PestStan\Analysis\Expectation\ExpectationMatcherRegistry;
-use PestStan\Analysis\Expectation\MatcherCategoryRegistry;
+use Pest\PHPStan\Analysis\Expectation\ExpectationMatcherRegistry;
+use Pest\PHPStan\Analysis\Expectation\MatcherCategoryRegistry;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 

@@ -15,104 +15,104 @@ parametersSchema:
 
 services:
     -
-        class: PestStan\Type\Pest\PestFileDiscoverer
+        class: Pest\PHPStan\Type\Pest\PestFileDiscoverer
         arguments:
             scanPaths: %paths%
             rootDir: %currentWorkingDirectory%
 
     -
-        class: PestStan\Type\Pest\PestConfigReader
+        class: Pest\PHPStan\Type\Pest\PestConfigReader
         arguments:
             pestConfigFiles: %peststan.pestConfigFiles%
 
     -
-        class: PestStan\Type\Pest\PestFunctionReturnTypeExtension
+        class: Pest\PHPStan\Type\Pest\PestFunctionReturnTypeExtension
         tags:
             - phpstan.broker.dynamicFunctionReturnTypeExtension
 
     -
-        class: PestStan\Type\Pest\ExpectationMethodReturnTypeExtension
+        class: Pest\PHPStan\Type\Pest\ExpectationMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
-        class: PestStan\Type\Pest\OppositeExpectationMethodReturnTypeExtension
+        class: Pest\PHPStan\Type\Pest\OppositeExpectationMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
-        class: PestStan\Type\Pest\TestClosureThisTypeExtension
+        class: Pest\PHPStan\Type\Pest\TestClosureThisTypeExtension
         arguments:
             testCaseClass: %peststan.testCaseClass%
         tags:
             - phpstan.functionParameterClosureThisExtension
 
     -
-        class: PestStan\Type\Pest\TestCasePropertiesExtension
+        class: Pest\PHPStan\Type\Pest\TestCasePropertiesExtension
         tags:
             - phpstan.broker.propertiesClassReflectionExtension
 
     -
-        class: PestStan\Type\Pest\ExpectationPropertiesExtension
+        class: Pest\PHPStan\Type\Pest\ExpectationPropertiesExtension
         tags:
             - phpstan.broker.propertiesClassReflectionExtension
 
     -
-        class: PestStan\Type\Pest\PestHookPropertyReader
+        class: Pest\PHPStan\Type\Pest\PestHookPropertyReader
 
     -
-        class: PestStan\Type\Pest\TestCaseDynamicPropertyTypeExtension
+        class: Pest\PHPStan\Type\Pest\TestCaseDynamicPropertyTypeExtension
         tags:
             - phpstan.broker.expressionTypeResolverExtension
 
     -
-        class: PestStan\Type\Pest\HigherOrderExpectationTypeExtension
+        class: Pest\PHPStan\Type\Pest\HigherOrderExpectationTypeExtension
         tags:
             - phpstan.broker.expressionTypeResolverExtension
 
     -
-        class: PestStan\Type\Pest\PestInternalClassAccessIgnoreExtension
+        class: Pest\PHPStan\Type\Pest\PestInternalClassAccessIgnoreExtension
         tags:
             - phpstan.ignoreErrorExtension
 
     -
-        class: PestStan\Type\Pest\TestCallMethodsClassReflectionExtension
+        class: Pest\PHPStan\Type\Pest\TestCallMethodsClassReflectionExtension
         arguments:
             testCaseClass: %peststan.testCaseClass%
         tags:
             - phpstan.broker.methodsClassReflectionExtension
 
     -
-        class: PestStan\Type\Pest\ProtectedMethodCallIgnoreExtension
+        class: Pest\PHPStan\Type\Pest\ProtectedMethodCallIgnoreExtension
         arguments:
             testCaseClass: %peststan.testCaseClass%
         tags:
             - phpstan.ignoreErrorExtension
 
     -
-        class: PestStan\Rules\InvalidThrowsExceptionRule
+        class: Pest\PHPStan\Rules\InvalidThrowsExceptionRule
         arguments:
             reflectionProvider: @reflectionProvider
         tags:
             - phpstan.rules.rule
 
     -
-        class: PestStan\Rules\CoversClassExistsRule
+        class: Pest\PHPStan\Rules\CoversClassExistsRule
         arguments:
             reflectionProvider: @reflectionProvider
         tags:
             - phpstan.rules.rule
 
 rules:
-    - PestStan\Rules\DisallowedCallInDescribeRule
-    - PestStan\Rules\StaticTestClosureRule
-    - PestStan\Rules\RepeatWithInvalidValueRule
-    - PestStan\Rules\DuplicateTestDescriptionRule
-    - PestStan\Rules\ImpossibleExpectationRule
-    - PestStan\Rules\RedundantExpectationRule
-    - PestStan\Rules\ExpectationValueTypeRule
-    - PestStan\Rules\EmptyTestClosureRule
-    - PestStan\Rules\BeforeAllThisUsageRule
-    - PestStan\Rules\DescribeWithoutTestsRule
-    - PestStan\Rules\InvalidGroupNameRule
-    - PestStan\Rules\RedundantLocalUseRule
+    - Pest\PHPStan\Rules\DisallowedCallInDescribeRule
+    - Pest\PHPStan\Rules\StaticTestClosureRule
+    - Pest\PHPStan\Rules\RepeatWithInvalidValueRule
+    - Pest\PHPStan\Rules\DuplicateTestDescriptionRule
+    - Pest\PHPStan\Rules\ImpossibleExpectationRule
+    - Pest\PHPStan\Rules\RedundantExpectationRule
+    - Pest\PHPStan\Rules\ExpectationValueTypeRule
+    - Pest\PHPStan\Rules\EmptyTestClosureRule
+    - Pest\PHPStan\Rules\BeforeAllThisUsageRule
+    - Pest\PHPStan\Rules\DescribeWithoutTestsRule
+    - Pest\PHPStan\Rules\InvalidGroupNameRule
+    - Pest\PHPStan\Rules\RedundantLocalUseRule

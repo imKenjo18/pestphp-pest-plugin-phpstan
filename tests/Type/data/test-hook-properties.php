@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace TestHookProperties;
 
-use function PHPStan\Testing\assertType;
-
 use Tests\TestCase;
 use Tests\Type\Fixtures\Author;
 use Tests\Type\Fixtures\Post;
+
+use function PHPStan\Testing\assertType;
 
 function someFunction(): mixed
 {

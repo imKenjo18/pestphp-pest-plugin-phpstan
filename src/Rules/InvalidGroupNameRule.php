@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
 use Pest\Configuration;
 use Pest\PendingCalls\TestCall;
 use Pest\PendingCalls\UsesCall;
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -20,8 +20,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
 /**
- * Detects empty string arguments passed to group().
- *
  * @implements Rule<MethodCall>
  */
 final class InvalidGroupNameRule implements Rule
@@ -55,7 +53,7 @@ final class InvalidGroupNameRule implements Rule
         }
 
         foreach ($args as $arg) {
-            if ($arg->value instanceof String_ && trim($arg->value->value) === '') {
+            if ($arg->value instanceof String_ && mb_trim($arg->value->value) === '') {
                 return [
                     RuleErrorBuilder::message('group() requires a non-empty string argument.')
                         ->identifier(PestDiagnosticIdentifiers::GROUP_INVALID_NAME)

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use LogicException;
 use Pest\Concerns\Testable;
@@ -16,14 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Resolves methods on TestCall that originate from its @mixin types.
- *
  * PHPStan's native @mixin resolution does not support union types, so
  * `@mixin HigherOrderCallables|TestCase|Testable` on TestCall is silently
- * ignored, causing method.notFound for methods like preset().
- *
- * This extension resolves methods from the Pest-specific mixin types in
- * declaration order, returning the real MethodReflection with its correct
- * return type so that downstream chains (e.g. preset()->php()) resolve fully.
  */
 final class TestCallMethodsClassReflectionExtension implements MethodsClassReflectionExtension
 {

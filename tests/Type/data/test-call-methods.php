@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace TestCallMethods;
 
 use Pest\PendingCalls\TestCall;
+use RuntimeException;
 
 use function PHPStan\Testing\assertType;
-
-use RuntimeException;
 
 function testItReturnsTestCall(): void
 {

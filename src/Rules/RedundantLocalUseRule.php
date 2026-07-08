@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
-use PestStan\Type\Pest\PestConfigReader;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Type\Pest\PestConfigReader;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\CallLike;
@@ -20,8 +20,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Reports statically known local Pest classes or traits already applied by global use configuration in Pest.php.
- *
  * @implements Rule<CallLike>
  */
 final class RedundantLocalUseRule implements Rule
@@ -51,7 +49,7 @@ final class RedundantLocalUseRule implements Rule
 
         $globalByClass = [];
         foreach ($globalUses as $globalUse) {
-            $globalByClass[strtolower(ltrim($globalUse['class'], '\\'))] = $globalUse['config'];
+            $globalByClass[mb_strtolower(mb_ltrim($globalUse['class'], '\\'))] = $globalUse['config'];
         }
 
         $errors = [];
@@ -61,7 +59,7 @@ final class RedundantLocalUseRule implements Rule
                 continue;
             }
 
-            $config = $globalByClass[strtolower(ltrim($className, '\\'))] ?? null;
+            $config = $globalByClass[mb_strtolower(mb_ltrim($className, '\\'))] ?? null;
             if ($config === null) {
                 continue;
             }
@@ -83,24 +81,24 @@ final class RedundantLocalUseRule implements Rule
     {
         return $expr instanceof FuncCall
             && $expr->name instanceof Name
-            && strtolower($expr->name->toString()) === 'uses';
+            && mb_strtolower($expr->name->toString()) === 'uses';
     }
 
     private function isLocalPestConfigurationUseCall(Expr $expr): bool
     {
         return $expr instanceof MethodCall
             && $expr->name instanceof Identifier
-            && in_array(strtolower($expr->name->toString()), ['use', 'uses'], true)
+            && in_array(mb_strtolower($expr->name->toString()), ['use', 'uses'], true)
             && $expr->var instanceof FuncCall
             && $expr->var->name instanceof Name
-            && strtolower($expr->var->name->toString()) === 'pest';
+            && mb_strtolower($expr->var->name->toString()) === 'pest';
     }
 
     private function resolveClassName(Expr $expr, Scope $scope): ?string
     {
         if (! $expr instanceof ClassConstFetch
             || ! $expr->name instanceof Identifier
-            || strtolower($expr->name->toString()) !== 'class'
+            || mb_strtolower($expr->name->toString()) !== 'class'
             || ! $expr->class instanceof Name) {
             return null;
         }
@@ -119,8 +117,8 @@ final class RedundantLocalUseRule implements Rule
     {
         $workingDirectory = getcwd();
         $normalizedWorkingDirectory = str_replace('\\', '/', $workingDirectory === false ? '' : $workingDirectory);
-        if ($normalizedWorkingDirectory !== '' && str_starts_with($config, $normalizedWorkingDirectory . '/')) {
-            return substr($config, strlen($normalizedWorkingDirectory) + 1);
+        if ($normalizedWorkingDirectory !== '' && str_starts_with($config, $normalizedWorkingDirectory.'/')) {
+            return mb_substr($config, mb_strlen($normalizedWorkingDirectory) + 1);
         }
 
         return $config;

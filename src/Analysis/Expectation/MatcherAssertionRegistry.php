@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Analysis\Expectation;
+namespace Pest\PHPStan\Analysis\Expectation;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;

@@ -2,21 +2,18 @@
 
 declare(strict_types=1);
 
-// Errors: $this usage inside afterAll
 afterAll(function (): void {
-    $this->user = new stdClass; // line 7
+    $this->user = new stdClass;
 });
 
 afterAll(function (): void {
-    $this->tearDownConnection(); // line 11
+    $this->tearDownConnection();
 });
 
-// Valid: $this inside afterEach (not static context)
 afterEach(function (): void {
     $this->user = new stdClass;
 });
 
-// Valid: afterAll without $this
 afterAll(function (): void {
     $db = new stdClass;
 });

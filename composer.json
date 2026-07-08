@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PestStan\\": "src/"
+            "Pest\\PHPStan\\": "src/"
         }
     },
     "autoload-dev": {

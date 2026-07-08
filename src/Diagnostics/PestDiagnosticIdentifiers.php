@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Diagnostics;
+namespace Pest\PHPStan\Diagnostics;
 
 final class PestDiagnosticIdentifiers
 {

@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 describe('group with beforeAll', function (): void {
-    beforeAll(function (): void { // line 6
-        // setup
+    beforeAll(function (): void { //
     });
 
     it('test inside describe', function (): void {
@@ -13,8 +12,7 @@ describe('group with beforeAll', function (): void {
 });
 
 describe('group with afterAll', function (): void {
-    afterAll(function (): void { // line 16
-        // cleanup
+    afterAll(function (): void { //
     });
 
     it('test inside describe', function (): void {
@@ -23,11 +21,9 @@ describe('group with afterAll', function (): void {
 });
 
 describe('group with both', function (): void {
-    beforeAll(function (): void { // line 26
-        // setup
+    beforeAll(function (): void { //
     });
-    afterAll(function (): void { // line 29
-        // cleanup
+    afterAll(function (): void { //
     });
 
     it('test inside describe', function (): void {
@@ -35,23 +31,21 @@ describe('group with both', function (): void {
     });
 });
 
-// Valid: beforeAll/afterAll at top level
 beforeAll(function (): void {
-    // setup
+    //
 });
 
 afterAll(function (): void {
-    // cleanup
+    //
 });
 
-// Valid: beforeEach/afterEach inside describe
 describe('group with hooks', function (): void {
     beforeEach(function (): void {
-        // setup
+        //
     });
 
     afterEach(function (): void {
-        // cleanup
+        //
     });
 
     it('test', function (): void {

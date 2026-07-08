@@ -2,52 +2,50 @@
 
 declare(strict_types=1);
 
-// Errors: rector-pest-generated string matchers on non-string values
 it('toBeUppercase on int', function (): void {
-    expect(42)->toBeUppercase(); // line 7
+    expect(42)->toBeUppercase();
 });
 
 it('toBeLowercase on int', function (): void {
-    expect(42)->toBeLowercase(); // line 11
+    expect(42)->toBeLowercase();
 });
 
 it('toBeAlphaNumeric on int', function (): void {
-    expect(42)->toBeAlphaNumeric(); // line 15
+    expect(42)->toBeAlphaNumeric();
 });
 
 it('toBeAlpha on int', function (): void {
-    expect(42)->toBeAlpha(); // line 19
+    expect(42)->toBeAlpha();
 });
 
 it('toBeSnakeCase on int', function (): void {
-    expect(42)->toBeSnakeCase(); // line 23
+    expect(42)->toBeSnakeCase();
 });
 
 it('toBeKebabCase on int', function (): void {
-    expect(42)->toBeKebabCase(); // line 27
+    expect(42)->toBeKebabCase();
 });
 
 it('toBeCamelCase on int', function (): void {
-    expect(42)->toBeCamelCase(); // line 31
+    expect(42)->toBeCamelCase();
 });
 
 it('toBeStudlyCase on int', function (): void {
-    expect(42)->toBeStudlyCase(); // line 35
+    expect(42)->toBeStudlyCase();
 });
 
 it('toBeUuid on int', function (): void {
-    expect(42)->toBeUuid(); // line 39
+    expect(42)->toBeUuid();
 });
 
 it('toBeUrl on int', function (): void {
-    expect(42)->toBeUrl(); // line 43
+    expect(42)->toBeUrl();
 });
 
 it('toBeSlug on int', function (): void {
-    expect(42)->toBeSlug(); // line 47
+    expect(42)->toBeSlug();
 });
 
-// Valid: modern string matchers on strings
 it('string matchers on strings', function (): void {
     expect('ABC')->toBeUppercase();
     expect('abc')->toBeLowercase();

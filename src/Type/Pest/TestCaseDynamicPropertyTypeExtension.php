@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -18,9 +18,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Resolves dynamic property types on TestCase from beforeEach hook assignments.
- */
 final class TestCaseDynamicPropertyTypeExtension implements ExpressionTypeResolverExtension
 {
     public function __construct(
@@ -81,9 +78,6 @@ final class TestCaseDynamicPropertyTypeExtension implements ExpressionTypeResolv
         return TypeCombinator::union(...$types);
     }
 
-    /**
-     * Checks whether the type has a natively declared property.
-     */
     private function hasNativeProperty(Type $type, string $propertyName): bool
     {
         return array_any($type->getObjectClassReflections(), fn (ClassReflection $classReflection): bool => $classReflection->hasNativeProperty($propertyName));

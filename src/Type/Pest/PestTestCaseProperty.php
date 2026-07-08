@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
 
-/**
- * Property reflection for dynamic Pest test properties (e.g., $this->postA set in beforeEach).
- */
 final class PestTestCaseProperty implements PropertyReflection
 {
     public function __construct(

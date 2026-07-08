@@ -4,41 +4,33 @@ declare(strict_types=1);
 
 use Pest\Mixins\Expectation;
 
-// Errors: static closures
-it('static closure in it', static function (): void { // line 5
+it('static closure in it', static function (): void {
     expect(true)->toBeTrue();
 });
 
-test('static closure in test', static function (): void { // line 9
+test('static closure in test', static function (): void {
     expect(true)->toBeTrue();
 });
 
-describe('static closure in describe', static function (): void { // line 13
+describe('static closure in describe', static function (): void {
     it('inner test', function (): void {
         expect(true)->toBeTrue();
     });
 });
 
-beforeEach(static function (): void { // line 19
-    // setup
+beforeEach(static function (): void { //
 });
 
-afterEach(static function (): void { // line 23
-    // cleanup
+afterEach(static function (): void { //
 });
 
-beforeAll(static function (): void { // line 27
-    // setup
+beforeAll(static function (): void { //
 });
 
-afterAll(static function (): void { // line 31
-    // cleanup
+afterAll(static function (): void { //
 });
 
-// Errors: static arrow functions
-it('static arrow fn in it', static fn (): Expectation => expect(true)->toBeTrue()); // line 36
-
-// Valid: non-static closures
+it('static arrow fn in it', static fn (): Expectation => expect(true)->toBeTrue());
 it('non-static closure', function (): void {
     expect(true)->toBeTrue();
 });
@@ -48,17 +40,17 @@ test('non-static closure', function (): void {
 });
 
 beforeEach(function (): void {
-    // setup
+    //
 });
 
 afterEach(function (): void {
-    // cleanup
+    //
 });
 
 beforeAll(function (): void {
-    // setup
+    //
 });
 
 afterAll(function (): void {
-    // cleanup
+    //
 });

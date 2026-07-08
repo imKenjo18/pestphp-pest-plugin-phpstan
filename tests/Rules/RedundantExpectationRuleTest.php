@@ -4,73 +4,73 @@ declare(strict_types=1);
 
 namespace Tests\Rules;
 
-use PestStan\Rules\RedundantExpectationRule;
+use Pest\PHPStan\Rules\RedundantExpectationRule;
 use Tests\RuleTestCase;
 
 beforeAll(function (): void {
     RuleTestCase::$rule = new RedundantExpectationRule;
     RuleTestCase::$additionalConfigFiles = [
-        __DIR__ . '/../extension.neon',
+        __DIR__.'/../extension.neon',
     ];
 });
 
 test('redundant expectations are reported', function (): void {
     $this->analyse([
-        __DIR__ . '/data/redundant-expectation.php',
+        __DIR__.'/data/redundant-expectation.php',
     ], [
         [
             'Calling toBeTrue() on Expectation<true>; assertion is redundant.',
-            7,
+            6,
             'The expectation value is already guaranteed to satisfy toBeTrue().',
         ],
         [
             'Calling toBeFalse() on Expectation<false>; assertion is redundant.',
-            11,
+            10,
             'The expectation value is already guaranteed to satisfy toBeFalse().',
         ],
         [
             'Calling toBeBool() on Expectation<true>; assertion is redundant.',
-            15,
+            14,
             'The expectation value is already guaranteed to satisfy toBeBool().',
         ],
         [
             'Calling toBeString() on Expectation<string>; assertion is redundant.',
-            19,
+            18,
             'The expectation value is already guaranteed to satisfy toBeString().',
         ],
         [
             'Calling toBeInt() on Expectation<int>; assertion is redundant.',
-            23,
+            22,
             'The expectation value is already guaranteed to satisfy toBeInt().',
         ],
         [
             'Calling toBeFloat() on Expectation<float>; assertion is redundant.',
-            27,
+            26,
             'The expectation value is already guaranteed to satisfy toBeFloat().',
         ],
         [
             'Calling toBeNull() on Expectation<null>; assertion is redundant.',
-            31,
+            30,
             'The expectation value is already guaranteed to satisfy toBeNull().',
         ],
         [
             'Calling toBeArray() on Expectation<array>; assertion is redundant.',
-            35,
+            34,
             'The expectation value is already guaranteed to satisfy toBeArray().',
         ],
         [
             'Calling toBeScalar() on Expectation<string>; assertion is redundant.',
-            39,
+            38,
             'The expectation value is already guaranteed to satisfy toBeScalar().',
         ],
         [
             'Calling toBeNumeric() on Expectation<int>; assertion is redundant.',
-            43,
+            42,
             'The expectation value is already guaranteed to satisfy toBeNumeric().',
         ],
         [
             'Calling toBeInstanceOf() on Expectation<stdClass>; assertion is redundant.',
-            47,
+            46,
             'The expectation value is already guaranteed to satisfy toBeInstanceOf().',
         ],
     ]);
@@ -78,7 +78,7 @@ test('redundant expectations are reported', function (): void {
 
 test('redundant chains ignore earlier invalid matcher steps', function (): void {
     $this->analyse([
-        __DIR__ . '/data/redundant-expectation-chain.php',
+        __DIR__.'/data/redundant-expectation-chain.php',
     ], [
         [
             'Calling toBeString() on Expectation<string>; assertion is redundant.',
@@ -90,7 +90,7 @@ test('redundant chains ignore earlier invalid matcher steps', function (): void 
 
 test('inheritance and scalar redundancies are reported', function (): void {
     $this->analyse([
-        __DIR__ . '/data/redundant-expectation-instanceof.php',
+        __DIR__.'/data/redundant-expectation-instanceof.php',
     ], [
         [
             'Calling toBeInstanceOf() on Expectation<RuntimeException>; assertion is redundant.',
@@ -117,7 +117,7 @@ test('inheritance and scalar redundancies are reported', function (): void {
 
 test('redundant semantic chains avoid duplicate diagnostics', function (): void {
     $this->analyse([
-        __DIR__ . '/data/redundant-expectation-semantic-chain.php',
+        __DIR__.'/data/redundant-expectation-semantic-chain.php',
     ], [
         [
             'Calling toBeString() on Expectation<string>; assertion is redundant.',

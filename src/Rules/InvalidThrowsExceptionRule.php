@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
 use Pest\PendingCalls\TestCall;
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -22,8 +22,6 @@ use PHPStan\Type\ObjectType;
 use Throwable;
 
 /**
- * Detects throws() calls with a class that is not Throwable.
- *
  * @implements Rule<MethodCall>
  */
 final class InvalidThrowsExceptionRule implements Rule

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
 use Pest\PendingCalls\TestCall;
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -21,8 +21,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 
 /**
- * Detects coversClass(), coversTrait(), and coversFunction() referencing non-existent symbols.
- *
  * @implements Rule<MethodCall>
  */
 final class CoversClassExistsRule implements Rule

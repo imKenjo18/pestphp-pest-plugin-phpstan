@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
-use PestStan\Diagnostics\PestDiagnostics;
-use PestStan\PestFunctionDetector;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Diagnostics\PestDiagnostics;
+use Pest\PHPStan\PestFunctionDetector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -22,8 +22,6 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 
 /**
- * Detects $this usage inside static Pest hook closures.
- *
  * @implements Rule<FuncCall>
  */
 final class BeforeAllThisUsageRule implements Rule

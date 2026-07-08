@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Rules;
+namespace Pest\PHPStan\Rules;
 
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
-use PestStan\PestFunctionDetector;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\PestFunctionDetector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
@@ -14,8 +14,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Detects static closures passed to Pest test functions.
- *
  * @implements Rule<FuncCall>
  */
 final class StaticTestClosureRule implements Rule

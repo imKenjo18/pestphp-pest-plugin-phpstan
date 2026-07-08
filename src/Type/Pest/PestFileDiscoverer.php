@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use FilesystemIterator;
 use PhpParser\Node;
@@ -20,9 +20,6 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use UnexpectedValueException;
 
-/**
- * Shared utilities for discovering Pest.php files, parsing PHP files, and normalizing paths.
- */
 final class PestFileDiscoverer
 {
     private readonly Parser $parser;
@@ -38,8 +35,6 @@ final class PestFileDiscoverer
     }
 
     /**
-     * Discovers Pest.php files from scan paths and optional explicit file paths.
-     *
      * @param  string[]  $extraFiles  Additional explicit Pest.php file paths
      * @return string[]
      */
@@ -75,8 +70,6 @@ final class PestFileDiscoverer
     }
 
     /**
-     * Parses a PHP file into AST with name resolution, returning statements and a use alias map.
-     *
      * @return array{Node[], array<string, string>}|null
      */
     public function parseFile(string $filePath): ?array
@@ -116,9 +109,6 @@ final class PestFileDiscoverer
     }
 
     /**
-     * Recursively finds Pest.php files in a directory using SPL iterators,
-     * skipping vendor directories.
-     *
      * @param  string[]  $results
      */
     private function findPestFilesInDirectory(string $directory, array &$results): void
@@ -152,8 +142,6 @@ final class PestFileDiscoverer
     }
 
     /**
-     * Walks up from a directory to find Pest.php files in ancestor directories.
-     *
      * @param  string[]  $results
      */
     private function findPestFilesInAncestors(string $directory, array &$results): void
@@ -168,7 +156,7 @@ final class PestFileDiscoverer
             }
 
             $current = $parent;
-            $candidate = $current . DIRECTORY_SEPARATOR . 'Pest.php';
+            $candidate = $current.DIRECTORY_SEPARATOR.'Pest.php';
 
             if (is_file($candidate)) {
                 $realPath = realpath($candidate);
@@ -180,8 +168,6 @@ final class PestFileDiscoverer
     }
 
     /**
-     * Builds an alias→FQCN map from use statements in the parsed AST.
-     *
      * @param  Node[]  $stmts
      * @return array<string, string>
      */

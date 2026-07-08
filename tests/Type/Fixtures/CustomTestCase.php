@@ -6,7 +6,7 @@ namespace Tests\Type\Fixtures;
 
 use PHPUnit\Framework\TestCase;
 
-class CustomTestCase extends TestCase
+final class CustomTestCase extends TestCase
 {
     public function publicHelper(): string
     {

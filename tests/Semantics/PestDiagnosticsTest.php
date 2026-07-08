@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tests\Semantics;
 
 use JsonException;
-use PestStan\Analysis\Expectation\ExpectationMatcherRegistry;
-use PestStan\Analysis\Expectation\MatcherCategoryRegistry;
-use PestStan\Analysis\Expectation\MatcherRequirementRegistry;
-use PestStan\Diagnostics\PestDiagnostic;
-use PestStan\Diagnostics\PestDiagnosticIdentifiers;
-use PestStan\Diagnostics\PestDiagnostics;
+use Pest\PHPStan\Analysis\Expectation\ExpectationMatcherRegistry;
+use Pest\PHPStan\Analysis\Expectation\MatcherCategoryRegistry;
+use Pest\PHPStan\Analysis\Expectation\MatcherRequirementRegistry;
+use Pest\PHPStan\Diagnostics\PestDiagnostic;
+use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
+use Pest\PHPStan\Diagnostics\PestDiagnostics;
 use PHPUnit\Framework\TestCase;
 
 final class PestDiagnosticsTest extends TestCase

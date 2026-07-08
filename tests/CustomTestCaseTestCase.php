@@ -13,10 +13,10 @@ abstract class CustomTestCaseTestCase extends TypeInferenceTestCase
      * @return string[]
      */
     #[Override]
-    public static function getAdditionalConfigFiles(): array
+    final public static function getAdditionalConfigFiles(): array
     {
         return [
-            __DIR__ . '/Type/custom-testcase-extension.neon',
+            __DIR__.'/Type/custom-testcase-extension.neon',
         ];
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,12 +13,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Suppresses method.protected errors for $this->method() calls inside Pest
- * test closures, where $this is bound to the configured TestCase class or a
- * subclass. This mirrors PHPUnit's behaviour where the generated child class
- * that Pest creates at runtime can legitimately call protected TestCase methods.
- */
 final class ProtectedMethodCallIgnoreExtension implements IgnoreErrorExtension
 {
     /** @param class-string $testCaseClass */

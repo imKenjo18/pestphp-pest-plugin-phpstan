@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use Pest\Expectation;
 use Pest\Expectations\HigherOrderExpectation;
@@ -18,9 +18,6 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
-/**
- * Resolves types for higher order expectation property access and method chaining.
- */
 final class HigherOrderExpectationTypeExtension implements ExpressionTypeResolverExtension
 {
     /** @var list<string> */

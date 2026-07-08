@@ -10,12 +10,12 @@ use Tests\RuleTestCase;
 beforeAll(function (): void {
     RuleTestCase::$rule = RuleTestCase::resolveRule(CallMethodsRule::class);
     RuleTestCase::$additionalConfigFiles = [
-        __DIR__ . '/../extension.neon',
+        __DIR__.'/../extension.neon',
     ];
 });
 
 test('testcall chain methods are allowed', function (): void {
     $this->analyse([
-        __DIR__ . '/../Type/data/test-call-chain-methods.php',
+        __DIR__.'/../Type/data/test-call-chain-methods.php',
     ], []);
 });

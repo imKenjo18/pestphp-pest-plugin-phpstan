@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestStan\Type\Pest;
+namespace Pest\PHPStan\Type\Pest;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -14,9 +14,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeFinder;
 
-/**
- * Parses Pest.php files to resolve effective class/trait bindings and global use-only bindings.
- */
 final class PestConfigReader
 {
     /** @var array<string, list<string>> Maps normalized directory paths to fully-qualified class/trait names */
@@ -36,8 +33,6 @@ final class PestConfigReader
     ) {}
 
     /**
-     * Resolves all classes and traits bound via uses() or Pest's extend/extends/use/uses methods.
-     *
      * @return list<string>
      */
     public function resolveBindings(string $filePath): array
@@ -59,10 +54,6 @@ final class PestConfigReader
     }
 
     /**
-     * Resolves statically known uses(...)->in(...), pest()->use(...)->in(...), and
-     * pest()->uses(...)->in(...) declarations that cover the given file. Classes from
-     * pest()->extend(...) and pest()->extends(...) are deliberately excluded.
-     *
      * @return list<array{class: string, config: string}>
      */
     public function resolveGlobalUses(string $filePath): array
@@ -113,8 +104,6 @@ final class PestConfigReader
     }
 
     /**
-     * Extracts uses(TestCase::class, Trait::class)->in('Feature', 'Unit') bindings.
-     *
      * @param  Node[]  $stmts
      */
     private function extractUsesBindings(NodeFinder $nodeFinder, array $stmts, string $pestFileDir, string $pestFile): void
@@ -147,14 +136,12 @@ final class PestConfigReader
 
             $classNames = $this->extractAllClassArgs($funcCall);
             if ($classNames !== []) {
-                $this->appendBindings($this->fileDiscoverer->normalizePath($pestFileDir) . '/', $classNames);
+                $this->appendBindings($this->fileDiscoverer->normalizePath($pestFileDir).'/', $classNames);
             }
         }
     }
 
     /**
-     * Extracts effective and use-only bindings from Pest configuration method chains.
-     *
      * @param  Node[]  $stmts
      */
     private function extractPestBindings(NodeFinder $nodeFinder, array $stmts, string $pestFileDir, string $pestFile): void
@@ -196,14 +183,12 @@ final class PestConfigReader
 
             $classNames = $this->extractAllClassArgs($methodCall);
             if ($classNames !== []) {
-                $this->appendBindings($this->fileDiscoverer->normalizePath($pestFileDir) . '/', $classNames);
+                $this->appendBindings($this->fileDiscoverer->normalizePath($pestFileDir).'/', $classNames);
             }
         }
     }
 
     /**
-     * Walks up uses(...)->...->in() chain to find all classes/traits from uses() call.
-     *
      * @return list<string>
      */
     private function resolveUsesClassNames(Expr $expr): array
@@ -220,8 +205,6 @@ final class PestConfigReader
     }
 
     /**
-     * Walks a chain rooted at pest() and keeps extend/extends and use/uses classes separate.
-     *
      * @return array{extend: list<string>, use: list<string>}|null
      */
     private function resolvePestClassNames(Expr $expr): ?array
@@ -281,10 +264,6 @@ final class PestConfigReader
     }
 
     /**
-     * Extracts directory strings from ->in('Feature', 'Unit') arguments.
-     *
-     * Returns null when any path is dynamic, because coverage cannot be proven.
-     *
      * @return list<string>|null
      */
     private function extractInDirectories(MethodCall $methodCall): ?array
@@ -307,8 +286,6 @@ final class PestConfigReader
     }
 
     /**
-     * Maps class/trait names to directories from an ->in() method call.
-     *
      * @param  list<string>  $classNames
      */
     private function registerDirectoryBindings(array $classNames, MethodCall $inMethodCall, string $pestFileDir): void
@@ -320,7 +297,7 @@ final class PestConfigReader
         }
 
         foreach ($directories as $dir) {
-            $fullPath = $this->fileDiscoverer->normalizePath($pestFileDir . '/' . $dir) . '/';
+            $fullPath = $this->fileDiscoverer->normalizePath($pestFileDir.'/'.$dir).'/';
             $this->appendBindings($fullPath, $classNames);
         }
     }
@@ -340,7 +317,7 @@ final class PestConfigReader
         }
 
         foreach ($directories as $dir) {
-            $directory = $this->fileDiscoverer->normalizePath($pestFileDir . '/' . $dir) . '/';
+            $directory = $this->fileDiscoverer->normalizePath($pestFileDir.'/'.$dir).'/';
             $this->globalUseDirectoryMap[$directory] ??= [];
 
             foreach ($classNames as $className) {
@@ -353,8 +330,6 @@ final class PestConfigReader
     }
 
     /**
-     * Appends class/trait names to the directory map.
-     *
      * @param  list<string>  $classNames
      */
     private function appendBindings(string $directory, array $classNames): void
@@ -367,8 +342,6 @@ final class PestConfigReader
     }
 
     /**
-     * Extracts all class/trait names from function/method call arguments.
-     *
      * @return list<string>
      */
     private function extractAllClassArgs(FuncCall|MethodCall $call): array
@@ -398,8 +371,6 @@ final class PestConfigReader
     }
 
     /**
-     * Checks whether a uses() FuncCall is part of a chain that ends with ->in().
-     *
      * @param  Node[]  $stmts
      */
     private function hasInChain(FuncCall $funcCall, array $stmts, NodeFinder $nodeFinder): bool
@@ -420,8 +391,6 @@ final class PestConfigReader
     }
 
     /**
-     * Checks whether a Pest configuration binding call is part of a chain with ->in().
-     *
      * @param  Node[]  $stmts
      */
     private function isPartOfInChain(MethodCall $bindingCall, array $stmts, NodeFinder $nodeFinder): bool
@@ -441,9 +410,6 @@ final class PestConfigReader
         return false;
     }
 
-    /**
-     * Walks the call chain to check if a target node is present (by identity).
-     */
     private function chainContainsNode(Expr $expr, Expr $target): bool
     {
         if ($expr === $target) {

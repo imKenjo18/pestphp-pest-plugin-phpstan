@@ -6,19 +6,19 @@ use ArrayIterator;
 use ArrayObject;
 
 it('toHaveCount on string', function (): void {
-    expect('foo')->toHaveCount(2); // line 9
+    expect('foo')->toHaveCount(2);
 });
 
 it('toHaveSameSize on int', function (): void {
-    expect(123)->toHaveSameSize([1, 2]); // line 13
+    expect(123)->toHaveSameSize([1, 2]);
 });
 
 it('each on int', function (): void {
-    expect(123)->each(fn ($item) => $item); // line 17
+    expect(123)->each(fn ($item) => $item);
 });
 
 it('sequence on int', function (): void {
-    expect(123)->sequence(fn ($item) => $item->toBe(1)); // line 21
+    expect(123)->sequence(fn ($item) => $item->toBe(1));
 });
 
 it('suppresses follow-up matcher checks after impossible assertion', function (): void {
@@ -26,7 +26,7 @@ it('suppresses follow-up matcher checks after impossible assertion', function ()
 });
 
 it('still validates follow-up matchers after redundant assertion', function (): void {
-    expect('abc')->toBeString()->toHaveCount(2); // line 29
+    expect('abc')->toBeString()->toHaveCount(2);
 });
 
 it('toHaveCount on array', function (): void {
