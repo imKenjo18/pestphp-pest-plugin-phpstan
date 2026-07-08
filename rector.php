@@ -2,26 +2,35 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
+use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
+use RectorPest\Set\PestLevelSetList;
+use RectorPest\Set\PestSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
-        __DIR__.'/src',
-    ]);
-
-    $rectorConfig->rules([
-        InlineConstructorDefaultToPropertyRector::class,
-    ]);
-
-    $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81,
-        SetList::CODE_QUALITY,
-        SetList::DEAD_CODE,
-        SetList::EARLY_RETURN,
-        SetList::TYPE_DECLARATION,
-        SetList::PRIVATIZATION,
-    ]);
-};
+return RectorConfig::configure()
+    ->withPaths([
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ])
+    ->withRootFiles()
+    ->withSkip([
+        ReadOnlyClassRector::class,
+        __DIR__ . '/tests/Type/data',
+        __DIR__ . '/tests/Rules/data',
+    ])
+    ->withSets([
+        PestLevelSetList::UP_TO_PEST_30,
+        PestSetList::PEST_CODE_QUALITY,
+        PestSetList::PEST_CHAIN,
+    ])
+    ->withImportNames(removeUnusedImports: true)
+    ->withPhpSets(php82: true)
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        privatization: true,
+        instanceOf: true,
+        earlyReturn: true,
+    );

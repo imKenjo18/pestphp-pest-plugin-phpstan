@@ -1,53 +1,64 @@
 {
-    "name": "pestphp/pest-plugin-template",
-    "description": "My awesome plugin",
-    "keywords": [
-        "php",
-        "framework",
-        "pest",
-        "unit",
-        "test",
-        "testing",
-        "plugin"
-    ],
+    "name": "pestphp/pest-plugin-phpstan",
+    "description": "PHPStan extension for Pest PHP testing framework",
+    "type": "phpstan-extension",
     "license": "MIT",
+    "keywords": ["phpstan", "pest", "testing", "static-analysis"],
     "require": {
         "php": "^8.4",
-        "pestphp/pest": "^5.0.0",
-        "pestphp/pest-plugin": "^5.0.0"
+        "phpstan/phpstan": "^2.0"
+    },
+    "require-dev": {
+        "laravel/pao": "^1.0",
+        "laravel/pint": "^1.18",
+        "mrpunyapal/rector-pest": "^0.2.0",
+        "pestphp/pest": "^3.0 || ^4.0 || ^5.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "rector/rector": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Pest\\PluginName\\": "src/"
-        },
-        "files": [
-            "src/Autoload.php"
-        ]
-    },
-    "require-dev": {
-        "pestphp/pest-dev-tools": "^5.0.0"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "sort-packages": true,
-        "preferred-install": "dist",
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "PestStan\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        },
+        "platform-check": false
+    },
     "scripts": {
-        "refacto": "rector",
-        "lint": "pint",
-        "test:refacto": "rector --dry-run",
-        "test:lint": "pint --test",
+        "lint": [
+            "rector",
+            "pint"
+        ],
+        "test:lint": [
+            "rector --dry-run",
+            "pint --test"
+        ],
         "test:types": "phpstan analyse --ansi",
-        "test:unit": "pest --colors=always",
+        "test:unit": "pest",
         "test": [
-            "@test:refacto",
             "@test:lint",
             "@test:types",
             "@test:unit"
         ]
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
