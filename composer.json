@@ -6,16 +6,16 @@
     "keywords": ["phpstan", "pest", "testing", "static-analysis"],
     "require": {
         "php": "^8.4",
-        "phpstan/phpstan": "^2.0"
+        "phpstan/phpstan": "^2.2.5"
     },
     "require-dev": {
-        "laravel/pao": "^1.0",
-        "laravel/pint": "^1.18",
-        "mrpunyapal/rector-pest": "^0.2.0",
-        "pestphp/pest": "^3.0 || ^4.0 || ^5.0",
-        "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan-strict-rules": "^2.0",
-        "rector/rector": "^2.0"
+        "laravel/pao": "^1.1.2",
+        "laravel/pint": "^1.29.3",
+        "mrpunyapal/rector-pest": "^0.2.17",
+        "pestphp/pest": "^5.0.0",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan-strict-rules": "^2.0.11",
+        "rector/rector": "^2.5.4"
     },
     "autoload": {
         "psr-4": {
