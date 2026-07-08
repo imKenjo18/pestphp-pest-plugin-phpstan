@@ -8,10 +8,10 @@ use PHPStan\Rules\Methods\CallMethodsRule;
 use Tests\RuleTestCase;
 
 beforeAll(function (): void {
-    RuleTestCase::$rule = RuleTestCase::resolveRule(CallMethodsRule::class);
     RuleTestCase::$additionalConfigFiles = [
         __DIR__.'/../Type/custom-testcase-extension.neon',
     ];
+    RuleTestCase::$rule = RuleTestCase::resolveRule(CallMethodsRule::class);
 });
 
 test('protected method calls are allowed with custom test case', function (): void {

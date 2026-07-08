@@ -8,10 +8,10 @@ use Pest\PHPStan\Rules\InvalidThrowsExceptionRule;
 use Tests\RuleTestCase;
 
 beforeAll(function (): void {
-    RuleTestCase::$rule = RuleTestCase::resolveRule(InvalidThrowsExceptionRule::class);
     RuleTestCase::$additionalConfigFiles = [
         __DIR__.'/../extension.neon',
     ];
+    RuleTestCase::$rule = RuleTestCase::resolveRule(InvalidThrowsExceptionRule::class);
 });
 
 test('non throwable class in throws is reported', function (): void {

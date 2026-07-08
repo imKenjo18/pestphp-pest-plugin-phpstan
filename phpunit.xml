@@ -4,7 +4,7 @@
          backupGlobals="false"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutOutputDuringTests="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="tests/bootstrap.php"
          cacheResult="false"
          colors="true"
          failOnRisky="true"
@@ -26,7 +26,7 @@
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
-    <source>
+    <source restrictWarnings="true">
         <include>
             <directory suffix=".php">./src</directory>
         </include>

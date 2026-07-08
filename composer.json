@@ -11,10 +11,18 @@
         "plugin",
         "phpstan"
     ],
-    "license": "MIT",
     "type": "phpstan-extension",
     "license": "MIT",
-    "keywords": ["phpstan", "pest", "testing", "static-analysis"],
+    "authors": [
+        {
+            "name": "Punyapal Shah",
+            "email": "mrpunyapal@gmail.com"
+        },
+        {
+            "name": "Nuno Maduro",
+            "email": "enunomaduro@gmail.com"
+        }
+    ],
     "require": {
         "php": "^8.4",
         "phpstan/phpstan": "^2.2.5"

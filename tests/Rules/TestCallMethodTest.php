@@ -8,10 +8,10 @@ use PHPStan\Rules\Methods\CallMethodsRule;
 use Tests\RuleTestCase;
 
 beforeAll(function (): void {
-    RuleTestCase::$rule = RuleTestCase::resolveRule(CallMethodsRule::class);
     RuleTestCase::$additionalConfigFiles = [
         __DIR__.'/../extension.neon',
     ];
+    RuleTestCase::$rule = RuleTestCase::resolveRule(CallMethodsRule::class);
 });
 
 test('testcall chain methods are allowed', function (): void {

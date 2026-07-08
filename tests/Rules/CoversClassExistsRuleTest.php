@@ -8,10 +8,10 @@ use Pest\PHPStan\Rules\CoversClassExistsRule;
 use Tests\RuleTestCase;
 
 beforeAll(function (): void {
-    RuleTestCase::$rule = RuleTestCase::resolveRule(CoversClassExistsRule::class);
     RuleTestCase::$additionalConfigFiles = [
         __DIR__.'/../extension.neon',
     ];
+    RuleTestCase::$rule = RuleTestCase::resolveRule(CoversClassExistsRule::class);
 });
 
 test('non existent class in covers class is reported', function (): void {
