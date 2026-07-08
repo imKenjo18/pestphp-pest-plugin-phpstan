@@ -49,13 +49,7 @@ final class TestCallMethodsClassReflectionExtension implements MethodsClassRefle
             return false;
         }
 
-        foreach ($this->mixinClasses() as $mixinClass) {
-            if ($this->hasPublicMixinMethod($mixinClass, $methodName)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->mixinClasses(), fn (string $mixinClass): bool => $this->hasPublicMixinMethod($mixinClass, $methodName));
     }
 
     public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection

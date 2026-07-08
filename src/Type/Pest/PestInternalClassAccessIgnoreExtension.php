@@ -35,12 +35,6 @@ final class PestInternalClassAccessIgnoreExtension implements IgnoreErrorExtensi
     /** @param list<non-empty-string> $classes */
     private function isPestInternalType(array $classes): bool
     {
-        foreach ($classes as $class) {
-            if (str_starts_with($class, 'Pest\\')) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($classes, fn (string $class): bool => str_starts_with($class, 'Pest\\'));
     }
 }

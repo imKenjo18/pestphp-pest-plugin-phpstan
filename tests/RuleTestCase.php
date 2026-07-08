@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Override;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase as RuleTestCaseCore;
 
@@ -24,6 +25,7 @@ abstract class RuleTestCase extends RuleTestCaseCore
     /**
      * @return string[]
      */
+    #[Override]
     public static function getAdditionalConfigFiles(): array
     {
         return self::$additionalConfigFiles;

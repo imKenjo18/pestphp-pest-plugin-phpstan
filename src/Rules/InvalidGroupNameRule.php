@@ -69,12 +69,6 @@ final class InvalidGroupNameRule implements Rule
 
     private function isSupportedGroupCaller(Type $callerType): bool
     {
-        foreach ([TestCall::class, UsesCall::class, Configuration::class] as $supportedCaller) {
-            if ((new ObjectType($supportedCaller))->isSuperTypeOf($callerType)->yes()) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any([TestCall::class, UsesCall::class, Configuration::class], fn (string $supportedCaller): bool => (new ObjectType($supportedCaller))->isSuperTypeOf($callerType)->yes());
     }
 }

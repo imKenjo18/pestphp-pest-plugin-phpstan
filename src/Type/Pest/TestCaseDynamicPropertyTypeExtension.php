@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\ExpressionTypeResolverExtension;
 use PHPStan\Type\MixedType;
@@ -85,12 +86,6 @@ final class TestCaseDynamicPropertyTypeExtension implements ExpressionTypeResolv
      */
     private function hasNativeProperty(Type $type, string $propertyName): bool
     {
-        foreach ($type->getObjectClassReflections() as $classReflection) {
-            if ($classReflection->hasNativeProperty($propertyName)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($type->getObjectClassReflections(), fn (ClassReflection $classReflection): bool => $classReflection->hasNativeProperty($propertyName));
     }
 }

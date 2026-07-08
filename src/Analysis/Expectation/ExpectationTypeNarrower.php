@@ -46,13 +46,7 @@ final class ExpectationTypeNarrower
     private function computeOverlap(Type $incomingValueType, Type $expectedValueType): bool
     {
         if ($incomingValueType instanceof UnionType) {
-            foreach ($incomingValueType->getTypes() as $innerType) {
-                if ($this->hasOverlap($innerType, $expectedValueType)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return array_any($incomingValueType->getTypes(), fn (Type $innerType): bool => $this->hasOverlap($innerType, $expectedValueType));
         }
 
         if ($incomingValueType->isObject()->yes() && $expectedValueType->isObject()->yes()) {
