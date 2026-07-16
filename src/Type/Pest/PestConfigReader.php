@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 
 final class PestConfigReader
@@ -21,6 +23,9 @@ final class PestConfigReader
 
     /** @var array<string, list<array{class: string, config: string}>> */
     private array $globalUseDirectoryMap = [];
+
+    /** @var array<string, list<string>> Caches bindings declared directly inside a test file */
+    private array $fileBindingsCache = [];
 
     private bool $parsed = false;
 
@@ -47,6 +52,42 @@ final class PestConfigReader
         }
 
         return array_values(array_unique($bindings));
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function resolveFileBindings(string $filePath): array
+    {
+        $normalizedFile = $this->fileDiscoverer->normalizePath($filePath);
+
+        if (isset($this->fileBindingsCache[$normalizedFile])) {
+            return $this->fileBindingsCache[$normalizedFile];
+        }
+
+        $parsed = $this->fileDiscoverer->parseFile($filePath);
+        if ($parsed === null) {
+            return $this->fileBindingsCache[$normalizedFile] = [];
+        }
+
+        [$stmts] = $parsed;
+
+        $bindings = [];
+        foreach ($this->topLevelExpressions($stmts) as $expr) {
+            $usesArgs = $this->extractFileUsesArgs($expr);
+            if ($usesArgs !== []) {
+                array_push($bindings, ...$usesArgs);
+
+                continue;
+            }
+
+            $pestArgs = $this->extractFilePestArgs($expr);
+            if ($pestArgs !== []) {
+                array_push($bindings, ...$pestArgs);
+            }
+        }
+
+        return $this->fileBindingsCache[$normalizedFile] = array_values(array_unique($bindings));
     }
 
     /**
@@ -430,6 +471,89 @@ final class PestConfigReader
 
         if ($expr instanceof MethodCall) {
             return $this->chainContainsNode($expr->var, $target);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  Node[]  $stmts
+     * @return list<Expr>
+     */
+    private function topLevelExpressions(array $stmts): array
+    {
+        $expressions = [];
+
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Namespace_) {
+                foreach ($stmt->stmts as $namespacedStmt) {
+                    if ($namespacedStmt instanceof Expression) {
+                        $expressions[] = $namespacedStmt->expr;
+                    }
+                }
+
+                continue;
+            }
+
+            if ($stmt instanceof Expression) {
+                $expressions[] = $stmt->expr;
+            }
+        }
+
+        return $expressions;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function extractFileUsesArgs(Expr $expr): array
+    {
+        if ($this->chainHasIn($expr)) {
+            return [];
+        }
+
+        $root = $this->rootFuncCall($expr);
+        if (! $root instanceof FuncCall || ! $this->isFuncNamed($root, 'uses')) {
+            return [];
+        }
+
+        return $this->extractAllClassArgs($root);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function extractFilePestArgs(Expr $expr): array
+    {
+        if (! $expr instanceof MethodCall || $this->chainHasIn($expr)) {
+            return [];
+        }
+
+        $pestBindings = $this->resolvePestClassNames($expr);
+        if ($pestBindings === null) {
+            return [];
+        }
+
+        return [...$pestBindings['extend'], ...$pestBindings['use']];
+    }
+
+    private function rootFuncCall(Expr $expr): ?FuncCall
+    {
+        while ($expr instanceof MethodCall) {
+            $expr = $expr->var;
+        }
+
+        return $expr instanceof FuncCall ? $expr : null;
+    }
+
+    private function chainHasIn(Expr $expr): bool
+    {
+        while ($expr instanceof MethodCall) {
+            if ($this->fileDiscoverer->isMethodNamed($expr, 'in')) {
+                return true;
+            }
+
+            $expr = $expr->var;
         }
 
         return false;

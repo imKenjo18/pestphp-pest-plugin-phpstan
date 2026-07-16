@@ -17,6 +17,7 @@ return RectorConfig::configure()
         ReadOnlyClassRector::class,
         __DIR__.'/tests/Type/data',
         __DIR__.'/tests/Rules/data',
+        __DIR__.'/tests/Fixtures/CustomTestCaseInference',
     ])
     ->withSets([
         PestLevelSetList::UP_TO_PEST_30,

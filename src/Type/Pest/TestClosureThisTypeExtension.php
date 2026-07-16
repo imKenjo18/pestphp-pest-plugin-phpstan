@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FunctionParameterClosureThisExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -31,6 +32,7 @@ final class TestClosureThisTypeExtension implements FunctionParameterClosureThis
 
     public function __construct(
         private readonly PestConfigReader $pestConfigReader,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {}
 
     public function isFunctionSupported(FunctionReflection $functionReflection, ParameterReflection $parameter): bool
@@ -47,17 +49,43 @@ final class TestClosureThisTypeExtension implements FunctionParameterClosureThis
         ParameterReflection $parameter,
         Scope $scope
     ): Type {
-        $bindings = $this->pestConfigReader->resolveBindings($scope->getFile());
+        $types = $this->toClassObjectTypes(
+            $this->pestConfigReader->resolveFileBindings($scope->getFile()),
+        );
 
-        if ($bindings === []) {
+        if ($types === []) {
+            $types = $this->toClassObjectTypes(
+                $this->pestConfigReader->resolveBindings($scope->getFile()),
+            );
+        }
+
+        if ($types === []) {
             return new ObjectType(TestCase::class);
         }
 
-        $types = array_map(
-            static fn (string $class): ObjectType => new ObjectType($class),
-            $bindings,
-        );
-
         return count($types) === 1 ? $types[0] : TypeCombinator::intersect(...$types);
+    }
+
+    /**
+     * @param  list<string>  $bindings
+     * @return list<ObjectType>
+     */
+    private function toClassObjectTypes(array $bindings): array
+    {
+        $types = [];
+
+        foreach ($bindings as $binding) {
+            if (! $this->reflectionProvider->hasClass($binding)) {
+                continue;
+            }
+
+            if ($this->reflectionProvider->getClass($binding)->isTrait()) {
+                continue;
+            }
+
+            $types[] = new ObjectType($binding);
+        }
+
+        return $types;
     }
 }
