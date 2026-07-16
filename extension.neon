@@ -1,17 +1,8 @@
 parameters:
-    peststan:
-        testCaseClass: PHPUnit\Framework\TestCase
-        pestConfigFiles: []
     universalObjectCratesClasses:
         - PHPUnit\Framework\TestCase
     scanDirectories:
         - src
-
-parametersSchema:
-    peststan: structure([
-        testCaseClass: string()
-        pestConfigFiles: listOf(string())
-    ])
 
 services:
     -
@@ -22,8 +13,6 @@ services:
 
     -
         class: Pest\PHPStan\Type\Pest\PestConfigReader
-        arguments:
-            pestConfigFiles: %peststan.pestConfigFiles%
 
     -
         class: Pest\PHPStan\Type\Pest\PestFunctionReturnTypeExtension
@@ -42,8 +31,6 @@ services:
 
     -
         class: Pest\PHPStan\Type\Pest\TestClosureThisTypeExtension
-        arguments:
-            testCaseClass: %peststan.testCaseClass%
         tags:
             - phpstan.functionParameterClosureThisExtension
 
@@ -77,15 +64,11 @@ services:
 
     -
         class: Pest\PHPStan\Type\Pest\TestCallMethodsClassReflectionExtension
-        arguments:
-            testCaseClass: %peststan.testCaseClass%
         tags:
             - phpstan.broker.methodsClassReflectionExtension
 
     -
         class: Pest\PHPStan\Type\Pest\ProtectedMethodCallIgnoreExtension
-        arguments:
-            testCaseClass: %peststan.testCaseClass%
         tags:
             - phpstan.ignoreErrorExtension
 

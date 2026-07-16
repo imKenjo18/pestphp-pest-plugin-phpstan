@@ -29,10 +29,8 @@ final class TestClosureThisTypeExtension implements FunctionParameterClosureThis
         'afterAll',
     ];
 
-    /** @param class-string $testCaseClass */
     public function __construct(
         private readonly PestConfigReader $pestConfigReader,
-        private readonly string $testCaseClass = TestCase::class,
     ) {}
 
     public function isFunctionSupported(FunctionReflection $functionReflection, ParameterReflection $parameter): bool
@@ -52,7 +50,7 @@ final class TestClosureThisTypeExtension implements FunctionParameterClosureThis
         $bindings = $this->pestConfigReader->resolveBindings($scope->getFile());
 
         if ($bindings === []) {
-            return new ObjectType($this->testCaseClass);
+            return new ObjectType(TestCase::class);
         }
 
         $types = array_map(

@@ -20,7 +20,7 @@ beforeAll(function (): void {
         throw new RuntimeException('Redundant local use fixture directory not found.');
     }
 
-    $reader = new PestConfigReader([], new PestFileDiscoverer([$fixtureDir]));
+    $reader = new PestConfigReader(new PestFileDiscoverer([$fixtureDir]));
     RuleTestCase::$rule = new RedundantLocalUseRule($reader);
 });
 

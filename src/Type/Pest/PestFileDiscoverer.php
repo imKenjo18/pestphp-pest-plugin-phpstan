@@ -35,19 +35,11 @@ final class PestFileDiscoverer
     }
 
     /**
-     * @param  string[]  $extraFiles  Additional explicit Pest.php file paths
      * @return string[]
      */
-    public function discoverPestFiles(array $extraFiles = []): array
+    public function discoverPestFiles(): array
     {
         $files = [];
-
-        foreach ($extraFiles as $configFile) {
-            $realPath = realpath($configFile);
-            if ($realPath !== false && is_file($realPath)) {
-                $files[] = $realPath;
-            }
-        }
 
         $scanPaths = $this->scanPaths;
 

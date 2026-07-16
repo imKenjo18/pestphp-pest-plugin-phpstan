@@ -24,11 +24,7 @@ final class PestConfigReader
 
     private bool $parsed = false;
 
-    /**
-     * @param  string[]  $pestConfigFiles  Explicit Pest.php file paths from config
-     */
     public function __construct(
-        private readonly array $pestConfigFiles,
         private readonly PestFileDiscoverer $fileDiscoverer,
     ) {}
 
@@ -72,6 +68,22 @@ final class PestConfigReader
         return $bindings;
     }
 
+    /**
+     * @return list<string>
+     */
+    public function allBoundClasses(): array
+    {
+        $this->ensureParsed();
+
+        $bindings = [];
+
+        foreach ($this->directoryMap as $classNames) {
+            array_push($bindings, ...$classNames);
+        }
+
+        return array_values(array_unique($bindings));
+    }
+
     private function ensureParsed(): void
     {
         if ($this->parsed) {
@@ -80,7 +92,7 @@ final class PestConfigReader
 
         $this->parsed = true;
 
-        $pestFiles = $this->fileDiscoverer->discoverPestFiles($this->pestConfigFiles);
+        $pestFiles = $this->fileDiscoverer->discoverPestFiles();
 
         foreach ($pestFiles as $pestFile) {
             $this->parsePestFile($pestFile);

@@ -23,7 +23,7 @@ $makeReader = static function (): array {
 
     $discoverer = new PestFileDiscoverer([$fixtureDir]);
 
-    return [$fixtureDir, new PestConfigReader([], $discoverer)];
+    return [$fixtureDir, new PestConfigReader($discoverer)];
 };
 
 test('resolves extend binding for feature directory', function () use ($makeReader): void {
@@ -60,6 +60,16 @@ test('accumulates parent and subdirectory bindings', function () use ($makeReade
         ->toContain(HelperTrait::class);
 });
 
+test('collects the union of all bound classes across directories', function () use ($makeReader): void {
+    [, $reader] = $makeReader();
+
+    $bindings = $reader->allBoundClasses();
+
+    expect($bindings)
+        ->toContain(CustomTestCase::class)
+        ->toContain(HelperTrait::class);
+});
+
 test('returns empty for unmatched path', function () use ($makeReader): void {
     [, $reader] = $makeReader();
 
@@ -74,7 +84,7 @@ test('resolves statically known global uses and skips dynamic paths', function (
         throw new RuntimeException('Redundant local use fixture directory not found.');
     }
 
-    $reader = new PestConfigReader([], new PestFileDiscoverer([$fixtureDir]));
+    $reader = new PestConfigReader(new PestFileDiscoverer([$fixtureDir]));
     $bindings = $reader->resolveGlobalUses($fixtureDir.'/Feature/uses.php');
 
     expect(array_column($bindings, 'class'))

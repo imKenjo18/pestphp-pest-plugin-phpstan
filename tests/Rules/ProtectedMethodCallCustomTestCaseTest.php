@@ -16,6 +16,6 @@ beforeAll(function (): void {
 
 test('protected method calls are allowed with custom test case', function (): void {
     $this->analyse([
-        __DIR__.'/data/protected-method-calls-custom-testcase.php',
+        __DIR__.'/../Fixtures/CustomTestCaseInference/Feature/protected-method-calls-custom-testcase.php',
     ], []);
 });

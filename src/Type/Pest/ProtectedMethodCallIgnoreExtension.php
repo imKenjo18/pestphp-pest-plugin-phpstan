@@ -15,11 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 final class ProtectedMethodCallIgnoreExtension implements IgnoreErrorExtension
 {
-    /** @param class-string $testCaseClass */
-    public function __construct(
-        private readonly string $testCaseClass = TestCase::class,
-    ) {}
-
     public function shouldIgnore(Error $error, Node $node, Scope $scope): bool
     {
         if ($error->getIdentifier() !== 'method.protected') {
@@ -44,7 +39,7 @@ final class ProtectedMethodCallIgnoreExtension implements IgnoreErrorExtension
 
         $thisType = $scope->getVariableType('this');
 
-        return (new ObjectType($this->testCaseClass))
+        return (new ObjectType(TestCase::class))
             ->isSuperTypeOf($thisType)
             ->yes();
     }

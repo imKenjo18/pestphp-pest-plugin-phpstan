@@ -12,13 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPUnit\Framework\TestCase;
 
-/**
- * Resolves methods on TestCall that originate from its @mixin types.
- * PHPStan's native @mixin resolution does not support union types, so
- * `@mixin HigherOrderCallables|TestCase|Testable` on TestCall is silently
- */
 final class TestCallMethodsClassReflectionExtension implements MethodsClassReflectionExtension
 {
     /** @var list<class-string> */
@@ -27,10 +21,9 @@ final class TestCallMethodsClassReflectionExtension implements MethodsClassRefle
         HigherOrderCallables::class,
     ];
 
-    /** @param class-string $testCaseClass */
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
-        private readonly string $testCaseClass = TestCase::class,
+        private readonly PestConfigReader $pestConfigReader,
     ) {}
 
     public function hasMethod(ClassReflection $classReflection, string $methodName): bool
@@ -57,14 +50,13 @@ final class TestCallMethodsClassReflectionExtension implements MethodsClassRefle
         throw new LogicException(sprintf('Method %s not found on any TestCall mixin class.', $methodName));
     }
 
-    /** @return list<class-string> */
+    /** @return list<string> */
     private function mixinClasses(): array
     {
-        if ($this->testCaseClass === TestCase::class) {
-            return self::MIXIN_CLASSES;
-        }
-
-        return [...self::MIXIN_CLASSES, $this->testCaseClass];
+        return array_values(array_unique([
+            ...self::MIXIN_CLASSES,
+            ...$this->pestConfigReader->allBoundClasses(),
+        ]));
     }
 
     private function hasPublicMixinMethod(string $mixinClass, string $methodName): bool

@@ -2,5 +2,5 @@ includes:
     - ../../extension.neon
 
 parameters:
-    peststan:
-        testCaseClass: Tests\Type\Fixtures\CustomTestCase
+    paths:
+        - ../Fixtures/CustomTestCaseInference
