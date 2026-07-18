@@ -34,5 +34,44 @@ test('before all in describe is reported', function (): void {
             'afterAll() cannot be used inside describe() blocks. Use afterEach() instead.',
             26,
         ],
+        [
+            'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
+            58,
+        ],
+        [
+            'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
+            69,
+        ],
+    ]);
+});
+
+test('disallowed hooks are reported across nested describe shapes', function (): void {
+    $this->analyse([
+        __DIR__.'/data/describe-structure-exhaustive.php',
+    ], [
+        [
+            'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
+            22,
+        ],
+        [
+            'afterAll() cannot be used inside describe() blocks. Use afterEach() instead.',
+            30,
+        ],
+        [
+            'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
+            38,
+        ],
+        [
+            'afterAll() cannot be used inside describe() blocks. Use afterEach() instead.',
+            39,
+        ],
+        [
+            'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
+            48,
+        ],
+        [
+            'beforeAll() cannot be used inside describe() blocks. Use beforeEach() instead.',
+            58,
+        ],
     ]);
 });

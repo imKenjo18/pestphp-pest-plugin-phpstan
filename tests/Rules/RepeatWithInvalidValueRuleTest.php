@@ -28,3 +28,26 @@ test('repeat with invalid values is reported', function (): void {
         ],
     ]);
 });
+
+test('invalid repeat values are reported without false positives', function (): void {
+    $this->analyse([
+        __DIR__.'/data/test-call-validation-exhaustive.php',
+    ], [
+        [
+            'repeat() requires a value greater than 0, got 0.',
+            7,
+        ],
+        [
+            'repeat() requires a value greater than 0, got -1.',
+            9,
+        ],
+        [
+            'repeat() requires a value greater than 0, got -100.',
+            11,
+        ],
+        [
+            'repeat() requires a value greater than 0, got 0.',
+            13,
+        ],
+    ]);
+});

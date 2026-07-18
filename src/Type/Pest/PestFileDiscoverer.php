@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\PHPStan\Type\Pest;
 
 use FilesystemIterator;
+use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -24,6 +25,9 @@ final class PestFileDiscoverer
 {
     private readonly Parser $parser;
 
+    /** @var list<string>|null Memoized result of discoverPestFiles() */
+    private ?array $discoveredPestFiles = null;
+
     /**
      * @param  string[]  $scanPaths  PHPStan's configured analysis paths
      */
@@ -39,6 +43,10 @@ final class PestFileDiscoverer
      */
     public function discoverPestFiles(): array
     {
+        if ($this->discoveredPestFiles !== null) {
+            return $this->discoveredPestFiles;
+        }
+
         $files = [];
 
         $scanPaths = $this->scanPaths;
@@ -58,7 +66,7 @@ final class PestFileDiscoverer
             $this->findPestFilesInAncestors($dir, $files);
         }
 
-        return array_unique($files);
+        return $this->discoveredPestFiles = array_values(array_unique($files));
     }
 
     /**
@@ -71,7 +79,12 @@ final class PestFileDiscoverer
             return null;
         }
 
-        $stmts = $this->parser->parse($content);
+        try {
+            $stmts = $this->parser->parse($content);
+        } catch (Error) {
+            return null;
+        }
+
         if ($stmts === null) {
             return null;
         }
@@ -95,6 +108,13 @@ final class PestFileDiscoverer
         return str_replace('\\', '/', $path);
     }
 
+    public function isPestConfigFile(string $filePath): bool
+    {
+        $normalizedFile = $this->normalizePath($filePath);
+
+        return array_any($this->discoverPestFiles(), fn (string $pestFile): bool => $this->normalizePath($pestFile) === $normalizedFile);
+    }
+
     public function isMethodNamed(MethodCall $methodCall, string $name): bool
     {
         return $methodCall->name instanceof Identifier && $methodCall->name->toString() === $name;
@@ -109,9 +129,9 @@ final class PestFileDiscoverer
             $directoryIterator = new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS);
             $filterIterator = new RecursiveCallbackFilterIterator(
                 $directoryIterator,
-                static fn (SplFileInfo $current, string $key, RecursiveDirectoryIterator $iterator): bool => ! $current->isDir() || $current->getFilename() !== 'vendor',
+                static fn (SplFileInfo $current, string $key, RecursiveDirectoryIterator $iterator): bool => ! $current->isDir() || ! in_array($current->getFilename(), ['vendor', 'node_modules', '.git'], true),
             );
-            $iterator = new RecursiveIteratorIterator($filterIterator);
+            $iterator = new RecursiveIteratorIterator($filterIterator, RecursiveIteratorIterator::LEAVES_ONLY, RecursiveIteratorIterator::CATCH_GET_CHILD);
         } catch (UnexpectedValueException) {
             return;
         }
@@ -140,7 +160,7 @@ final class PestFileDiscoverer
     {
         $current = $directory;
 
-        while (true) {
+        while (! $this->isProjectRoot($current)) {
             $parent = dirname($current);
 
             if ($parent === $current) {
@@ -157,6 +177,12 @@ final class PestFileDiscoverer
                 }
             }
         }
+    }
+
+    private function isProjectRoot(string $directory): bool
+    {
+        return is_file($directory.DIRECTORY_SEPARATOR.'composer.json')
+            || is_dir($directory.DIRECTORY_SEPARATOR.'.git');
     }
 
     /**

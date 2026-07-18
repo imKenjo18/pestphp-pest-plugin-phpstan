@@ -17,3 +17,11 @@ it('throws base exception', function (): void {
 it('throws anything', function (): void {
     throw new RuntimeException('error');
 })->throws();
+
+it('throws with a message only', function (): void {
+    throw new RuntimeException('Something went wrong');
+})->throws('Something went wrong');
+
+it('throws an unknown namespaced class', function (): void {
+    throw new RuntimeException('error');
+})->throws('Foo\Bar\MissingException');

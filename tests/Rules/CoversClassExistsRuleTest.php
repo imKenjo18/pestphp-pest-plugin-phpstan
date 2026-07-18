@@ -32,3 +32,26 @@ test('non existent class in covers class is reported', function (): void {
         ],
     ]);
 });
+
+test('missing covers references are reported without false positives', function (): void {
+    $this->analyse([
+        __DIR__.'/data/test-call-validation-exhaustive.php',
+    ], [
+        [
+            'Class App\\Missing\\Klass referenced in coversClass() does not exist.',
+            29,
+        ],
+        [
+            'Function missing_function_name() referenced in coversFunction() does not exist.',
+            31,
+        ],
+        [
+            'Class App\\Missing\\First referenced in coversClass() does not exist.',
+            33,
+        ],
+        [
+            'Class App\\Missing\\Second referenced in coversClass() does not exist.',
+            33,
+        ],
+    ]);
+});

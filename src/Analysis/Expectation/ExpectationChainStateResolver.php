@@ -28,19 +28,20 @@ final class ExpectationChainStateResolver
     ) {
         $this->matcherRegistry = $matcherRegistry ?? new ExpectationMatcherRegistry;
         $this->typeNarrower = $typeNarrower ?? new ExpectationTypeNarrower;
-        $this->stateCache = new WeakMap;
+
+        /** @var WeakMap<MethodCall, ExpectationChainState|null> $stateCache */
+        $stateCache = new WeakMap;
+
+        $this->stateCache = $stateCache;
     }
 
     public function resolve(MethodCall $methodCall, Scope $scope): ?ExpectationChainState
     {
         if ($this->stateCache->offsetExists($methodCall)) {
-            return $this->stateCache->offsetGet($methodCall);
+            return $this->stateCache[$methodCall];
         }
 
-        $state = $this->resolveState($methodCall, $scope);
-        $this->stateCache->offsetSet($methodCall, $state);
-
-        return $state;
+        return $this->stateCache[$methodCall] = $this->resolveState($methodCall, $scope);
     }
 
     private function resolveState(MethodCall $methodCall, Scope $scope): ?ExpectationChainState

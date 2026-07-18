@@ -26,6 +26,6 @@ uses(DynamicTrait::class)->in('StandaloneFeature');
 $dynamicPath = 'Feature';
 pest()->use(DynamicTrait::class)->in($dynamicPath);
 pest()->use(DynamicTrait::class)->in(test_path('Feature'));
-pest()->use(DynamicTrait::class)->in(__DIR__.'/Feature');
 pest()->use(DynamicTrait::class)->in(FEATURE_PATH);
+pest()->use(DynamicTrait::class)->in(__DIR__.$dynamicPath);
 pest()->use(MixedDynamicTrait::class)->in('Feature', $dynamicPath);

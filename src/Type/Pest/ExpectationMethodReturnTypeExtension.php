@@ -17,17 +17,10 @@ use PHPStan\Type\Type;
 
 final class ExpectationMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
-    private readonly ExpectationMatcherRegistry $matcherRegistry;
-
-    private readonly ExpectationTypeNarrower $typeNarrower;
-
     public function __construct(
-        ?ExpectationMatcherRegistry $matcherRegistry = null,
-        ?ExpectationTypeNarrower $typeNarrower = null,
-    ) {
-        $this->matcherRegistry = $matcherRegistry ?? new ExpectationMatcherRegistry;
-        $this->typeNarrower = $typeNarrower ?? new ExpectationTypeNarrower;
-    }
+        private readonly ExpectationMatcherRegistry $matcherRegistry,
+        private readonly ExpectationTypeNarrower $typeNarrower,
+    ) {}
 
     public function getClass(): string
     {

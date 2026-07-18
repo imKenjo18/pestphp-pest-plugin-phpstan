@@ -12,12 +12,9 @@ use PHPStan\Type\VerbosityLevel;
 
 final class ExpectationSemanticAnalyzer
 {
-    private readonly ExpectationChainStateResolver $chainStateResolver;
-
-    public function __construct(?ExpectationChainStateResolver $chainStateResolver = null)
-    {
-        $this->chainStateResolver = $chainStateResolver ?? new ExpectationChainStateResolver;
-    }
+    public function __construct(
+        private readonly ExpectationChainStateResolver $chainStateResolver,
+    ) {}
 
     public function analyzeInvalidMatcherType(MethodCall $methodCall, Scope $scope): ?PestDiagnostic
     {

@@ -28,3 +28,26 @@ test('empty closures are reported', function (): void {
         ],
     ]);
 });
+
+test('empty closures are reported unless the test is marked as todo', function (): void {
+    $this->analyse([
+        __DIR__.'/data/empty-and-duplicate-exhaustive.php',
+    ], [
+        [
+            "Test 'empty it' has an empty closure body. Add assertions or chain ->todo() to mark as pending.",
+            5,
+        ],
+        [
+            "Test 'empty test' has an empty closure body. Add assertions or chain ->todo() to mark as pending.",
+            7,
+        ],
+        [
+            "Test 'empty with a chain' has an empty closure body. Add assertions or chain ->todo() to mark as pending.",
+            9,
+        ],
+        [
+            "Test 'empty with only a comment' has an empty closure body. Add assertions or chain ->todo() to mark as pending.",
+            11,
+        ],
+    ]);
+});

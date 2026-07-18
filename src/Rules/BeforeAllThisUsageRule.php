@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace Pest\PHPStan\Rules;
 
+use Pest\PHPStan\ClosureBodyNodeFinder;
 use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
 use Pest\PHPStan\Diagnostics\PestDiagnostics;
 use Pest\PHPStan\PestFunctionDetector;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
@@ -62,48 +58,17 @@ final class BeforeAllThisUsageRule implements Rule
             return [];
         }
 
-        return $this->findThisUsages($closure, $functionName);
-    }
+        $thisUsages = ClosureBodyNodeFinder::find(
+            $closure,
+            static fn (Node $node): bool => $node instanceof Variable && $node->name === 'this',
+        );
 
-    /**
-     * @return list<IdentifierRuleError>
-     */
-    private function findThisUsages(Closure $closure, string $functionName): array
-    {
         $errors = [];
-
-        foreach ($closure->stmts as $stmt) {
-            if (! $stmt instanceof Expression) {
-                continue;
-            }
-
-            $this->walkExprForThis($stmt->expr, $errors, $functionName);
+        foreach ($thisUsages as $usage) {
+            $errors[] = $this->buildStaticHookError($functionName, $usage->getStartLine());
         }
 
         return $errors;
-    }
-
-    /**
-     * @param  list<IdentifierRuleError>  $errors
-     */
-    private function walkExprForThis(Expr $expr, array &$errors, string $functionName): void
-    {
-        if ($expr instanceof PropertyFetch && $expr->var instanceof Variable && $expr->var->name === 'this') {
-            $errors[] = $this->buildStaticHookError($functionName, $expr->getStartLine());
-
-            return;
-        }
-
-        if ($expr instanceof MethodCall && $expr->var instanceof Variable && $expr->var->name === 'this') {
-            $errors[] = $this->buildStaticHookError($functionName, $expr->getStartLine());
-
-            return;
-        }
-
-        if ($expr instanceof Assign) {
-            $this->walkExprForThis($expr->var, $errors, $functionName);
-            $this->walkExprForThis($expr->expr, $errors, $functionName);
-        }
     }
 
     private function buildStaticHookError(string $functionName, int $line): IdentifierRuleError

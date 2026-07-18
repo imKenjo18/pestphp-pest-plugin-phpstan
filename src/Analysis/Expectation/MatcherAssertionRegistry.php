@@ -58,6 +58,8 @@ final class MatcherAssertionRegistry
 
     public const INSTANCE_OF = 'instance_of';
 
+    public const RESOURCE = 'resource';
+
     /** @var array<string, string> */
     private const METHOD_ASSERTIONS = [
         'toBeString' => self::STRING,
@@ -75,7 +77,7 @@ final class MatcherAssertionRegistry
         'toBeNumeric' => self::NUMERIC,
         'toBeScalar' => self::SCALAR,
         'toBeInstanceOf' => self::INSTANCE_OF,
-        'toBeResource' => 'resource',
+        'toBeResource' => self::RESOURCE,
     ];
 
     /** @var array<string, Type> */
@@ -107,7 +109,7 @@ final class MatcherAssertionRegistry
             self::NULL => new NullType,
             self::OBJECT => new ObjectWithoutClassType,
             self::CALLABLE => new CallableType,
-            'resource' => new ResourceType,
+            self::RESOURCE => new ResourceType,
             self::ARRAY => new ArrayType(
                 new UnionType([new IntegerType, new StringType]),
                 new MixedType,

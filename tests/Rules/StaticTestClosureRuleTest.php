@@ -52,3 +52,50 @@ test('static closures are reported', function (): void {
         ],
     ]);
 });
+
+test('static closures are reported across every pest function', function (): void {
+    $this->analyse([
+        __DIR__.'/data/static-test-closure-exhaustive.php',
+    ], [
+        [
+            'Test closure passed to it() must not be static. Remove the `static` keyword.',
+            5,
+        ],
+        [
+            'Test closure passed to test() must not be static. Remove the `static` keyword.',
+            9,
+        ],
+        [
+            'Test closure passed to describe() must not be static. Remove the `static` keyword.',
+            13,
+        ],
+        [
+            'Test closure passed to beforeEach() must not be static. Remove the `static` keyword.',
+            17,
+        ],
+        [
+            'Test closure passed to afterEach() must not be static. Remove the `static` keyword.',
+            19,
+        ],
+        [
+            'Test closure passed to beforeAll() must not be static. Remove the `static` keyword.',
+            21,
+        ],
+        [
+            'Test closure passed to afterAll() must not be static. Remove the `static` keyword.',
+            23,
+        ],
+        [
+            'Test closure passed to it() must not be static. Remove the `static` keyword.',
+            25,
+        ],
+        [
+            'Test closure passed to it() must not be static. Remove the `static` keyword.',
+            27,
+        ],
+        [
+            'Test closure passed to it() must not be static. Remove the `static` keyword.',
+            29,
+        ],
+    ]);
+});

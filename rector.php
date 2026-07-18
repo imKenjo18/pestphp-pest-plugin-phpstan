@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use Pest\Rector\Rules\Pest2ToPest3\UsesToExtendRector;
+use Pest\Rector\Set\PestLevelSetList;
+use Pest\Rector\Set\PestSetList;
 use Rector\Config\RectorConfig;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
-use RectorPest\Set\PestLevelSetList;
-use RectorPest\Set\PestSetList;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -18,6 +19,9 @@ return RectorConfig::configure()
         __DIR__.'/tests/Type/data',
         __DIR__.'/tests/Rules/data',
         __DIR__.'/tests/Fixtures/CustomTestCaseInference',
+        UsesToExtendRector::class => [
+            __DIR__.'/tests/Type/Fixtures/pestconfig-matrix/Pest.php',
+        ],
     ])
     ->withSets([
         PestLevelSetList::UP_TO_PEST_30,

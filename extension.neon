@@ -15,6 +15,18 @@ services:
         class: Pest\PHPStan\Type\Pest\PestConfigReader
 
     -
+        class: Pest\PHPStan\Analysis\Expectation\ExpectationMatcherRegistry
+
+    -
+        class: Pest\PHPStan\Analysis\Expectation\ExpectationTypeNarrower
+
+    -
+        class: Pest\PHPStan\Analysis\Expectation\ExpectationChainStateResolver
+
+    -
+        class: Pest\PHPStan\Analysis\Expectation\ExpectationSemanticAnalyzer
+
+    -
         class: Pest\PHPStan\Type\Pest\PestFunctionReturnTypeExtension
         tags:
             - phpstan.broker.dynamicFunctionReturnTypeExtension
@@ -33,11 +45,6 @@ services:
         class: Pest\PHPStan\Type\Pest\TestClosureThisTypeExtension
         tags:
             - phpstan.functionParameterClosureThisExtension
-
-    -
-        class: Pest\PHPStan\Type\Pest\TestCasePropertiesExtension
-        tags:
-            - phpstan.broker.propertiesClassReflectionExtension
 
     -
         class: Pest\PHPStan\Type\Pest\ExpectationPropertiesExtension

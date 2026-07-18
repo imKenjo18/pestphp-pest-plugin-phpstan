@@ -32,3 +32,26 @@ test('describe without tests is reported', function (): void {
         ],
     ]);
 });
+
+test('describe blocks without tests are reported across nested shapes', function (): void {
+    $this->analyse([
+        __DIR__.'/data/describe-structure-exhaustive.php',
+    ], [
+        [
+            "describe() block 'completely empty' contains no tests.",
+            5,
+        ],
+        [
+            "describe() block 'hooks only' contains no tests.",
+            7,
+        ],
+        [
+            "describe() block 'statements but no tests' contains no tests.",
+            12,
+        ],
+        [
+            "describe() block 'inner empty' contains no tests.",
+            18,
+        ],
+    ]);
+});

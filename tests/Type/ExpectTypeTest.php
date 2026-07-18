@@ -61,3 +61,33 @@ test('test call chain method types', function (string $assertType, string $file,
 })->with(function (): Iterator {
     yield from TestCase::gatherAssertTypes(__DIR__.'/data/test-call-chain-methods.php');
 });
+
+test('exhaustive expect value types', function (string $assertType, string $file, mixed ...$args): void {
+    $this->assertFileAsserts($assertType, $file, ...$args);
+})->with(function (): Iterator {
+    yield from TestCase::gatherAssertTypes(__DIR__.'/data/expect-values-exhaustive.php');
+});
+
+test('exhaustive expectation matcher types', function (string $assertType, string $file, mixed ...$args): void {
+    $this->assertFileAsserts($assertType, $file, ...$args);
+})->with(function (): Iterator {
+    yield from TestCase::gatherAssertTypes(__DIR__.'/data/expectation-matchers-exhaustive.php');
+});
+
+test('exhaustive higher order expectation types', function (string $assertType, string $file, mixed ...$args): void {
+    $this->assertFileAsserts($assertType, $file, ...$args);
+})->with(function (): Iterator {
+    yield from TestCase::gatherAssertTypes(__DIR__.'/data/higher-order-exhaustive.php');
+});
+
+test('exhaustive test call types', function (string $assertType, string $file, mixed ...$args): void {
+    $this->assertFileAsserts($assertType, $file, ...$args);
+})->with(function (): Iterator {
+    yield from TestCase::gatherAssertTypes(__DIR__.'/data/test-call-exhaustive.php');
+});
+
+test('exhaustive hook property types', function (string $assertType, string $file, mixed ...$args): void {
+    $this->assertFileAsserts($assertType, $file, ...$args);
+})->with(function (): Iterator {
+    yield from TestCase::gatherAssertTypes(__DIR__.'/data/test-hook-properties-exhaustive.php');
+});

@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Pest\PHPStan\Rules;
 
+use Pest\PHPStan\ClosureBodyNodeFinder;
 use Pest\PHPStan\Diagnostics\PestDiagnosticIdentifiers;
 use Pest\PHPStan\PestFunctionDetector;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
@@ -49,27 +46,13 @@ final class DescribeWithoutTestsRule implements Rule
             static fn (Node $stmt): bool => ! $stmt instanceof Nop
         );
 
-        if ($realStmts === []) {
-            $description = $this->extractDescribeDescription($node);
-
-            return [
-                RuleErrorBuilder::message(
-                    sprintf("describe() block '%s' contains no tests.", $description)
-                )
-                    ->identifier(PestDiagnosticIdentifiers::DESCRIBE_WITHOUT_TESTS)
-                    ->build(),
-            ];
-        }
-
-        if ($this->containsTestCall($closure)) {
+        if ($realStmts !== [] && $this->containsTestCall($closure)) {
             return [];
         }
 
-        $description = $this->extractDescribeDescription($node);
-
         return [
             RuleErrorBuilder::message(
-                sprintf("describe() block '%s' contains no tests.", $description)
+                sprintf("describe() block '%s' contains no tests.", $this->extractDescribeDescription($node))
             )
                 ->identifier(PestDiagnosticIdentifiers::DESCRIBE_WITHOUT_TESTS)
                 ->build(),
@@ -78,35 +61,13 @@ final class DescribeWithoutTestsRule implements Rule
 
     private function containsTestCall(Closure $closure): bool
     {
-        foreach ($closure->stmts as $stmt) {
-            if (! $stmt instanceof Expression) {
-                continue;
-            }
+        $testCalls = ClosureBodyNodeFinder::find(
+            $closure,
+            static fn (Node $node): bool => $node instanceof FuncCall
+                && (PestFunctionDetector::isTestFunction($node) || PestFunctionDetector::isDescribeFunction($node)),
+        );
 
-            $call = $this->extractRootCall($stmt->expr);
-            if (! $call instanceof FuncCall) {
-                continue;
-            }
-
-            if (! $call->name instanceof Name) {
-                continue;
-            }
-
-            if (PestFunctionDetector::isTestFunction($call) || PestFunctionDetector::isDescribeFunction($call)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function extractRootCall(Expr $expr): ?FuncCall
-    {
-        while ($expr instanceof MethodCall) {
-            $expr = $expr->var;
-        }
-
-        return $expr instanceof FuncCall ? $expr : null;
+        return $testCalls !== [];
     }
 
     private function extractDescribeDescription(FuncCall $node): string

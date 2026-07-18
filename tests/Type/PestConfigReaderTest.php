@@ -78,6 +78,61 @@ test('returns empty for unmatched path', function () use ($makeReader): void {
     expect($bindings)->toBeEmpty();
 });
 
+test('resolves in() directories built from __DIR__', function (): void {
+    $fixtureDir = realpath(__DIR__.'/Fixtures/pestconfig-magicdir');
+    if ($fixtureDir === false) {
+        throw new RuntimeException('Magic dir fixture directory not found.');
+    }
+
+    $reader = new PestConfigReader(new PestFileDiscoverer([$fixtureDir]));
+
+    expect($reader->resolveBindings($fixtureDir.'/Feature/SomeTest.php'))
+        ->toContain(CustomTestCase::class);
+});
+
+test('expands glob patterns in in() targets like pest does', function (): void {
+    $fixtureDir = realpath(__DIR__.'/Fixtures/pestconfig-glob');
+    if ($fixtureDir === false) {
+        throw new RuntimeException('Glob fixture directory not found.');
+    }
+
+    $reader = new PestConfigReader(new PestFileDiscoverer([$fixtureDir]));
+
+    expect($reader->resolveBindings($fixtureDir.'/Feature/OtherTest.php'))
+        ->toContain(CustomTestCase::class);
+});
+
+test('resolves single-file in() targets to that file only', function (): void {
+    $fixtureDir = realpath(__DIR__.'/Fixtures/pestconfig-glob');
+    if ($fixtureDir === false) {
+        throw new RuntimeException('Glob fixture directory not found.');
+    }
+
+    $reader = new PestConfigReader(new PestFileDiscoverer([$fixtureDir]));
+
+    expect($reader->resolveBindings($fixtureDir.'/Feature/ExampleTest.php'))
+        ->toContain(HelperTrait::class)
+        ->and($reader->resolveBindings($fixtureDir.'/Feature/OtherTest.php'))
+        ->not->toContain(HelperTrait::class);
+});
+
+test('ignores pest files with syntax errors instead of crashing', function (): void {
+    $temporaryDir = sys_get_temp_dir().'/pest-phpstan-syntax-error-'.uniqid();
+    mkdir($temporaryDir.'/Feature', 0755, true);
+    file_put_contents($temporaryDir.'/Pest.php', "<?php\nuses(Foo::class->in('Feature');\n");
+
+    try {
+        $reader = new PestConfigReader(new PestFileDiscoverer([$temporaryDir]));
+
+        expect($reader->resolveBindings($temporaryDir.'/Feature/SomeTest.php'))->toBeArray()
+            ->and($reader->resolveFileBindings($temporaryDir.'/Pest.php'))->toBeArray();
+    } finally {
+        unlink($temporaryDir.'/Pest.php');
+        rmdir($temporaryDir.'/Feature');
+        rmdir($temporaryDir);
+    }
+});
+
 test('resolves statically known global uses and skips dynamic paths', function (): void {
     $fixtureDir = realpath(__DIR__.'/../Rules/data/redundant-local-use');
     if ($fixtureDir === false) {
@@ -91,7 +146,7 @@ test('resolves statically known global uses and skips dynamic paths', function (
         ->toContain(RefreshDatabase::class)
         ->not->toContain(CustomTestCase::class)
         ->not->toContain(DynamicTrait::class)
-        ->not->toContain(MixedDynamicTrait::class)
+        ->toContain(MixedDynamicTrait::class)
         ->and($reader->resolveBindings($fixtureDir.'/Feature/uses.php'))->toContain(CustomTestCase::class)
         ->toContain(RefreshDatabase::class)
         ->and(array_column($reader->resolveGlobalUses($fixtureDir.'/PluralFeature/multiple.php'), 'class'))

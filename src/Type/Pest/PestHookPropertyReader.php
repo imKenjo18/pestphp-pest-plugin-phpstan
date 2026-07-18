@@ -27,14 +27,18 @@ final class PestHookPropertyReader
     /** @var array<string, array<string, list<Expr>>> Maps normalized file paths to property name → list of RHS Exprs */
     private array $filePropertyCache = [];
 
-    /** @var array<string, array<string, list<Expr>>> Maps normalized directory paths to property name → list of RHS Exprs */
+    /** @var array<string, array<string, list<Expr>>> Maps normalized binding keys (directories or files) to property name → list of RHS Exprs */
     private array $directoryPropertyMap = [];
+
+    private readonly PestTargetResolver $targetResolver;
 
     private bool $pestFilesParsed = false;
 
     public function __construct(
         private readonly PestFileDiscoverer $fileDiscoverer,
-    ) {}
+    ) {
+        $this->targetResolver = new PestTargetResolver($fileDiscoverer);
+    }
 
     /**
      * @return array<string, list<Expr>>
@@ -64,22 +68,17 @@ final class PestHookPropertyReader
     {
         $normalizedFile = $this->fileDiscoverer->normalizePath($filePath);
 
-        $bestMatch = null;
-        $bestLength = 0;
+        $properties = [];
 
-        foreach ($this->directoryPropertyMap as $directory => $properties) {
-            if (! str_starts_with($normalizedFile, $directory)) {
+        foreach ($this->directoryPropertyMap as $bindingKey => $bindingProperties) {
+            if (! $this->targetResolver->matches($bindingKey, $normalizedFile)) {
                 continue;
             }
 
-            $dirLength = mb_strlen($directory);
-            if ($dirLength > $bestLength) {
-                $bestMatch = $properties;
-                $bestLength = $dirLength;
-            }
+            $this->mergePropertyExprs($properties, $bindingProperties);
         }
 
-        return $bestMatch ?? [];
+        return $properties;
     }
 
     private function ensurePestFilesParsed(): void
@@ -117,7 +116,7 @@ final class PestHookPropertyReader
      */
     private function extractUsesBeforeEachProperties(NodeFinder $nodeFinder, array $stmts, array $useMap, string $pestFilePath): void
     {
-        $directoryPath = $this->fileDiscoverer->normalizePath(dirname($pestFilePath)).'/';
+        $pestFileDir = dirname($pestFilePath);
 
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $nodeFinder->findInstanceOf($stmts, MethodCall::class);
@@ -131,21 +130,64 @@ final class PestHookPropertyReader
                 continue;
             }
 
+            $targets = $this->resolveChainTargets($methodCall, $methodCalls, $pestFileDir);
+            if ($targets === []) {
+                continue;
+            }
+
             foreach ($methodCall->getArgs() as $arg) {
                 if (! $arg->value instanceof Closure) {
                     continue;
                 }
 
                 $assigned = $this->extractPropertyAssignments($arg->value, $useMap);
-                if (! isset($this->directoryPropertyMap[$directoryPath])) {
-                    $this->directoryPropertyMap[$directoryPath] = [];
-                }
 
-                $this->mergePropertyExprs($this->directoryPropertyMap[$directoryPath], $assigned);
+                foreach ($targets as $target) {
+                    $this->directoryPropertyMap[$target] ??= [];
+                    $this->mergePropertyExprs($this->directoryPropertyMap[$target], $assigned);
+                }
 
                 break;
             }
         }
+    }
+
+    /**
+     * @param  MethodCall[]  $allMethodCalls
+     * @return list<string>
+     */
+    private function resolveChainTargets(MethodCall $beforeEachCall, array $allMethodCalls, string $pestFileDir): array
+    {
+        $targets = [];
+
+        foreach ($allMethodCalls as $candidate) {
+            if (! $this->fileDiscoverer->isMethodNamed($candidate, 'in')) {
+                continue;
+            }
+
+            if (! $this->chainContains($candidate, $beforeEachCall) && ! $this->chainContains($beforeEachCall, $candidate)) {
+                continue;
+            }
+
+            array_push($targets, ...$this->targetResolver->resolveInTargets($candidate, $pestFileDir));
+        }
+
+        return array_values(array_unique($targets));
+    }
+
+    private function chainContains(MethodCall $outer, MethodCall $target): bool
+    {
+        $expr = $outer->var;
+
+        while ($expr instanceof MethodCall) {
+            if ($expr === $target) {
+                return true;
+            }
+
+            $expr = $expr->var;
+        }
+
+        return false;
     }
 
     /**
@@ -341,12 +383,16 @@ final class PestHookPropertyReader
      */
     private function resolveExprFromDocComment(string $docText, ?string $varName, array $useMap): ?Expr
     {
-        if (! (bool) preg_match('/@var\s+([\\\\\w]+)(?:\s+\$(\w+))?/', $docText, $matches)) {
+        if (! (bool) preg_match('/@var\s+(\S+)(?:\s+\$(\w+))?/', $docText, $matches)) {
             return null;
         }
 
         $typeName = $matches[1];
         $docVarName = $matches[2] ?? null;
+
+        if (preg_match('/^\\\\?\w+(?:\\\\\w+)*$/', $typeName) !== 1) {
+            return null;
+        }
 
         if ($docVarName === 'this') {
             return null;

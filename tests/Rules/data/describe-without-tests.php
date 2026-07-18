@@ -40,3 +40,19 @@ describe('test something', function () {
 describe('todo test', function (): void {
     todo('todo');
 });
+
+describe('loop generated tests', function (): void {
+    foreach (['a', 'b'] as $case) {
+        it('handles '.$case, function (): void {
+            expect(true)->toBeTrue();
+        });
+    }
+});
+
+describe('conditionally generated tests', function (): void {
+    if (PHP_OS_FAMILY !== 'Windows') {
+        it('runs on unix', function (): void {
+            expect(true)->toBeTrue();
+        });
+    }
+});

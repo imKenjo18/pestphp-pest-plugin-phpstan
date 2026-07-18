@@ -32,3 +32,34 @@ test('duplicate descriptions are reported', function (): void {
         ],
     ]);
 });
+
+test('duplicate descriptions are reported across chains and it prefixes', function (): void {
+    $this->analyse([
+        __DIR__.'/data/empty-and-duplicate-exhaustive.php',
+    ], [
+        [
+            "A test with the description 'it duplicated it' already exists in this file.",
+            19,
+        ],
+        [
+            "A test with the description 'duplicated test' already exists in this file.",
+            27,
+        ],
+        [
+            "A test with the description 'it collides with a test' already exists in this file.",
+            35,
+        ],
+        [
+            "A test with the description 'it triplicated' already exists in this file.",
+            43,
+        ],
+        [
+            "A test with the description 'it triplicated' already exists in this file.",
+            47,
+        ],
+        [
+            "A test with the description 'it duplicated through a chain' already exists in this file.",
+            55,
+        ],
+    ]);
+});

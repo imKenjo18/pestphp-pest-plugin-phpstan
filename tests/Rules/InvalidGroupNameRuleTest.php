@@ -59,3 +59,26 @@ test('config-style group names are validated', function (): void {
         ],
     ]);
 });
+
+test('invalid group names are reported without false positives', function (): void {
+    $this->analyse([
+        __DIR__.'/data/test-call-validation-exhaustive.php',
+    ], [
+        [
+            'group() requires a non-empty string argument.',
+            15,
+        ],
+        [
+            'group() requires a non-empty string argument.',
+            17,
+        ],
+        [
+            'group() requires a non-empty string argument.',
+            19,
+        ],
+        [
+            'group() requires at least one non-empty string argument.',
+            21,
+        ],
+    ]);
+});

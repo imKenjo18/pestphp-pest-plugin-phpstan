@@ -18,12 +18,9 @@ use PHPStan\Rules\Rule;
  */
 final class ExpectationValueTypeRule implements Rule
 {
-    private readonly ExpectationSemanticAnalyzer $semanticAnalyzer;
-
-    public function __construct(?ExpectationSemanticAnalyzer $semanticAnalyzer = null)
-    {
-        $this->semanticAnalyzer = $semanticAnalyzer ?? new ExpectationSemanticAnalyzer;
-    }
+    public function __construct(
+        private readonly ExpectationSemanticAnalyzer $semanticAnalyzer,
+    ) {}
 
     public function getNodeType(): string
     {

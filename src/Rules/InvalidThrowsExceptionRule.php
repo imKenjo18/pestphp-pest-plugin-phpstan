@@ -59,6 +59,12 @@ final class InvalidThrowsExceptionRule implements Rule
             return [];
         }
 
+        if ($args[0]->value instanceof String_
+            && ! str_contains($className, '\\')
+            && ! $this->reflectionProvider->hasClass($className)) {
+            return [];
+        }
+
         if (! $this->reflectionProvider->hasClass($className)) {
             return [
                 RuleErrorBuilder::message(

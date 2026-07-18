@@ -133,7 +133,7 @@ function testDescribeScopedBeforeEach(): void
             $this->post = new Post;
         });
 
-        it('resolves property from describe-scoped beforeEach', function (): void {
+        it('resolves property from a beforeEach nested inside describe', function (): void {
             assertType(Post::class, $this->post);
         });
     });
