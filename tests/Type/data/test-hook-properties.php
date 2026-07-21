@@ -247,3 +247,26 @@ function testVarThisAnnotationDoesNotOverridePropertyType(): void
         assertType(Post::class, $this->post);
     });
 }
+
+function testBeforeEachSelfReferentialProperty(): void
+{
+    beforeEach(function (): void {
+        $this->selfCounter = ($this->selfCounter ?? 0) + 1;
+    });
+
+    it('does not infinitely recurse when a hook reads the property it assigns', function (): void {
+        assertType('(float|int)', $this->selfCounter);
+    });
+}
+
+function testBeforeEachMutuallyReferentialProperties(): void
+{
+    beforeEach(function (): void {
+        $this->cycleFirst = $this->cycleSecond;
+        $this->cycleSecond = $this->cycleFirst;
+    });
+
+    it('does not infinitely recurse on a cycle across properties', function (): void {
+        assertType('mixed', $this->cycleFirst);
+    });
+}

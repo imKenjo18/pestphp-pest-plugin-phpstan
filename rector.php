@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Pest\Rector\Rules\Pest2ToPest3\UsesToExtendRector;
-use Pest\Rector\Set\PestLevelSetList;
 use Pest\Rector\Set\PestSetList;
 use Rector\Config\RectorConfig;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
@@ -24,9 +23,7 @@ return RectorConfig::configure()
         ],
     ])
     ->withSets([
-        PestLevelSetList::UP_TO_PEST_30,
-        PestSetList::PEST_CODE_QUALITY,
-        PestSetList::PEST_CHAIN,
+        PestSetList::CODING_STYLE,
     ])
     ->withImportNames(removeUnusedImports: true)
     ->withPhpSets(php82: true)

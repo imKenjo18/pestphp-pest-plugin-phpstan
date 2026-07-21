@@ -20,6 +20,11 @@ use PHPUnit\Framework\TestCase;
 
 final class TestCaseDynamicPropertyTypeExtension implements ExpressionTypeResolverExtension
 {
+    /**
+     * @var array<string, true>
+     */
+    private array $resolving = [];
+
     public function __construct(
         private readonly PestHookPropertyReader $hookPropertyReader,
     ) {}
@@ -53,22 +58,34 @@ final class TestCaseDynamicPropertyTypeExtension implements ExpressionTypeResolv
             return null;
         }
 
-        $types = [];
-        foreach ($propertyExprs[$propertyName] as $rhsExpr) {
-            $resolved = $scope->getType($rhsExpr);
-            if ($resolved instanceof ErrorType) {
-                continue;
-            }
+        $key = $scope->getFile().'::'.$propertyName;
 
-            if ($resolved instanceof NeverType) {
-                continue;
-            }
+        if (isset($this->resolving[$key])) {
+            return null;
+        }
 
-            if ($resolved instanceof MixedType) {
-                continue;
-            }
+        $this->resolving[$key] = true;
 
-            $types[] = $resolved;
+        try {
+            $types = [];
+            foreach ($propertyExprs[$propertyName] as $rhsExpr) {
+                $resolved = $scope->getType($rhsExpr);
+                if ($resolved instanceof ErrorType) {
+                    continue;
+                }
+
+                if ($resolved instanceof NeverType) {
+                    continue;
+                }
+
+                if ($resolved instanceof MixedType) {
+                    continue;
+                }
+
+                $types[] = $resolved;
+            }
+        } finally {
+            unset($this->resolving[$key]);
         }
 
         if ($types === []) {
