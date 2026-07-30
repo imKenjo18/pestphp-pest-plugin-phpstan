@@ -22,7 +22,7 @@ use PhpParser\NodeFinder;
 
 final class PestHookPropertyReader
 {
-    private const HOOK_FUNCTIONS = ['beforeEach'];
+    private const array HOOK_FUNCTIONS = ['beforeEach'];
 
     /** @var array<string, array<string, list<Expr>>> Maps normalized file paths to property name → list of RHS Exprs */
     private array $filePropertyCache = [];

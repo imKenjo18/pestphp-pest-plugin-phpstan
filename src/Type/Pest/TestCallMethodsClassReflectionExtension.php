@@ -16,7 +16,7 @@ use PHPStan\Reflection\ReflectionProvider;
 final class TestCallMethodsClassReflectionExtension implements MethodsClassReflectionExtension
 {
     /** @var list<class-string> */
-    private const MIXIN_CLASSES = [
+    private const array MIXIN_CLASSES = [
         Testable::class,
         HigherOrderCallables::class,
     ];

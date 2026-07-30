@@ -39,7 +39,7 @@ final class ProtectedMethodCallIgnoreExtension implements IgnoreErrorExtension
 
         $thisType = $scope->getVariableType('this');
 
-        return (new ObjectType(TestCase::class))
+        return new ObjectType(TestCase::class)
             ->isSuperTypeOf($thisType)
             ->yes();
     }

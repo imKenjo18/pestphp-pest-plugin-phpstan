@@ -71,7 +71,7 @@ final class ExpectationChainStateResolver
     private function resolveRootState(MethodCall $methodCall, Scope $scope): ?ExpectationChainState
     {
         $callerType = $scope->getType($methodCall->var);
-        if (! (new ObjectType(Expectation::class))->isSuperTypeOf($callerType)->yes()) {
+        if (! new ObjectType(Expectation::class)->isSuperTypeOf($callerType)->yes()) {
             return null;
         }
 
@@ -169,7 +169,7 @@ final class ExpectationChainStateResolver
     private function resolveResultingValueType(MethodCall $methodCall, Scope $scope, Type $fallbackType): Type
     {
         $methodType = $scope->getType($methodCall);
-        if (! (new ObjectType(Expectation::class))->isSuperTypeOf($methodType)->yes()) {
+        if (! new ObjectType(Expectation::class)->isSuperTypeOf($methodType)->yes()) {
             return $fallbackType;
         }
 
@@ -182,7 +182,7 @@ final class ExpectationChainStateResolver
             MatcherRequirementRegistry::STRING => $valueType->isString()->no(),
             MatcherRequirementRegistry::ITERABLE => $valueType->isIterable()->no(),
             MatcherRequirementRegistry::COUNTABLE_OR_ITERABLE => $valueType->isIterable()->no()
-                && (new ObjectType(Countable::class))->isSuperTypeOf($valueType)->no(),
+                && new ObjectType(Countable::class)->isSuperTypeOf($valueType)->no(),
             default => false,
         };
     }

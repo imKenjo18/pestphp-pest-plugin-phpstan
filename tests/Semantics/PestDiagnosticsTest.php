@@ -47,7 +47,7 @@ test('lifecycle diagnostics carry the line and replacement hook', function (): v
 });
 
 test('diagnostic identifiers are unique and canonically namespaced', function (): void {
-    $identifiers = (new ReflectionClass(PestDiagnosticIdentifiers::class))->getConstants();
+    $identifiers = new ReflectionClass(PestDiagnosticIdentifiers::class)->getConstants();
 
     expect($identifiers)->not->toBeEmpty()
         ->and(array_values($identifiers))->toBe(array_values(array_unique($identifiers)));

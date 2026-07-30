@@ -6,14 +6,14 @@ namespace Pest\PHPStan\Analysis\Expectation;
 
 final class MatcherRequirementRegistry
 {
-    public const STRING = 'string';
+    public const string STRING = 'string';
 
-    public const ITERABLE = 'iterable';
+    public const string ITERABLE = 'iterable';
 
-    public const COUNTABLE_OR_ITERABLE = 'countable_or_iterable';
+    public const string COUNTABLE_OR_ITERABLE = 'countable_or_iterable';
 
     /** @var array<string, string> */
-    private const METHOD_REQUIREMENTS = [
+    private const array METHOD_REQUIREMENTS = [
         'json' => self::STRING,
         'toStartWith' => self::STRING,
         'toEndWith' => self::STRING,

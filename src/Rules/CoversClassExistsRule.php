@@ -26,7 +26,7 @@ use PHPStan\Type\ObjectType;
 final class CoversClassExistsRule implements Rule
 {
     /** @var array<string, string> Maps method names to the type of symbol expected */
-    private const COVERS_METHODS = [
+    private const array COVERS_METHODS = [
         'coversClass' => 'Class',
         'coversTrait' => 'Trait',
         'coversFunction' => 'Function',
@@ -56,7 +56,7 @@ final class CoversClassExistsRule implements Rule
         }
 
         $callerType = $scope->getType($node->var);
-        if (! (new ObjectType(TestCall::class))->isSuperTypeOf($callerType)->yes()) {
+        if (! new ObjectType(TestCall::class)->isSuperTypeOf($callerType)->yes()) {
             return [];
         }
 

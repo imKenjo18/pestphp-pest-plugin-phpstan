@@ -23,7 +23,7 @@ use PHPStan\Type\Type;
 final class HigherOrderExpectationTypeExtension implements ExpressionTypeResolverExtension
 {
     /** @var list<string> */
-    private const EXPECTATION_KNOWN_PROPERTIES = ['each', 'classes', 'traits', 'interfaces', 'enums'];
+    private const array EXPECTATION_KNOWN_PROPERTIES = ['each', 'classes', 'traits', 'interfaces', 'enums'];
 
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,

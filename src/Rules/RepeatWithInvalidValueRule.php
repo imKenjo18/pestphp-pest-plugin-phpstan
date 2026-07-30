@@ -35,7 +35,7 @@ final class RepeatWithInvalidValueRule implements Rule
         }
 
         $callerType = $scope->getType($node->var);
-        if (! (new ObjectType(TestCall::class))->isSuperTypeOf($callerType)->yes()) {
+        if (! new ObjectType(TestCall::class)->isSuperTypeOf($callerType)->yes()) {
             return [];
         }
 

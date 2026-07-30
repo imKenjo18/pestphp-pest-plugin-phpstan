@@ -28,40 +28,40 @@ use PHPStan\Type\UnionType;
 
 final class MatcherAssertionRegistry
 {
-    public const STRING = 'string';
+    public const string STRING = 'string';
 
-    public const INT = 'int';
+    public const string INT = 'int';
 
-    public const FLOAT = 'float';
+    public const string FLOAT = 'float';
 
-    public const BOOL = 'bool';
+    public const string BOOL = 'bool';
 
-    public const TRUE = 'true';
+    public const string TRUE = 'true';
 
-    public const FALSE = 'false';
+    public const string FALSE = 'false';
 
-    public const NULL = 'null';
+    public const string NULL = 'null';
 
-    public const ARRAY = 'array';
+    public const string ARRAY = 'array';
 
-    public const LIST = 'list';
+    public const string LIST = 'list';
 
-    public const OBJECT = 'object';
+    public const string OBJECT = 'object';
 
-    public const CALLABLE = 'callable';
+    public const string CALLABLE = 'callable';
 
-    public const ITERABLE = 'iterable';
+    public const string ITERABLE = 'iterable';
 
-    public const NUMERIC = 'numeric';
+    public const string NUMERIC = 'numeric';
 
-    public const SCALAR = 'scalar';
+    public const string SCALAR = 'scalar';
 
-    public const INSTANCE_OF = 'instance_of';
+    public const string INSTANCE_OF = 'instance_of';
 
-    public const RESOURCE = 'resource';
+    public const string RESOURCE = 'resource';
 
     /** @var array<string, string> */
-    private const METHOD_ASSERTIONS = [
+    private const array METHOD_ASSERTIONS = [
         'toBeString' => self::STRING,
         'toBeInt' => self::INT,
         'toBeFloat' => self::FLOAT,

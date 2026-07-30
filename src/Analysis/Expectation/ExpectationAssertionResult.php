@@ -8,17 +8,17 @@ use PHPStan\Type\Type;
 
 final readonly class ExpectationAssertionResult
 {
-    public const PASSTHROUGH = 'passthrough';
+    public const string PASSTHROUGH = 'passthrough';
 
-    public const ASSERTED = 'asserted';
+    public const string ASSERTED = 'asserted';
 
-    public const REDUNDANT = 'redundant';
+    public const string REDUNDANT = 'redundant';
 
-    public const IMPOSSIBLE = 'impossible';
+    public const string IMPOSSIBLE = 'impossible';
 
-    public const INVALID_REQUIREMENT = 'invalid_requirement';
+    public const string INVALID_REQUIREMENT = 'invalid_requirement';
 
-    public const SKIPPED_BROKEN_CHAIN = 'skipped_broken_chain';
+    public const string SKIPPED_BROKEN_CHAIN = 'skipped_broken_chain';
 
     public function __construct(
         public string $methodName,

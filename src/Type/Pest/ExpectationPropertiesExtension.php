@@ -15,7 +15,7 @@ use PHPStan\Type\MixedType;
 final class ExpectationPropertiesExtension implements PropertiesClassReflectionExtension
 {
     /** @var list<string> */
-    public const KNOWN_EXPECTATION_PROPERTIES = ['not', 'each', 'classes', 'traits', 'interfaces', 'enums', 'value'];
+    public const array KNOWN_EXPECTATION_PROPERTIES = ['not', 'each', 'classes', 'traits', 'interfaces', 'enums', 'value'];
 
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {

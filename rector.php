@@ -26,7 +26,7 @@ return RectorConfig::configure()
         PestSetList::CODING_STYLE,
     ])
     ->withImportNames(removeUnusedImports: true)
-    ->withPhpSets(php82: true)
+    ->withPhpSets(php84: true)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,

@@ -29,7 +29,7 @@ final class ArchExpectationPropertyIgnoreExtension implements IgnoreErrorExtensi
             return false;
         }
 
-        return (new ObjectType(ArchExpectation::class))
+        return new ObjectType(ArchExpectation::class)
             ->isSuperTypeOf($scope->getType($node->var))
             ->yes();
     }

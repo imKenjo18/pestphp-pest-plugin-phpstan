@@ -22,7 +22,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 final class DisallowedCallInDescribeRule implements Rule
 {
     /** @var array<string, string> */
-    private const FORBIDDEN_FUNCTIONS = [
+    private const array FORBIDDEN_FUNCTIONS = [
         'beforeAll' => PestDiagnosticIdentifiers::DESCRIBE_BEFORE_ALL_DISALLOWED,
         'afterAll' => PestDiagnosticIdentifiers::DESCRIBE_AFTER_ALL_DISALLOWED,
     ];

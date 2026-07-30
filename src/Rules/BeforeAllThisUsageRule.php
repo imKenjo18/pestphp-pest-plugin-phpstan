@@ -23,7 +23,7 @@ use PHPStan\Rules\Rule;
 final class BeforeAllThisUsageRule implements Rule
 {
     /** @var array<string, array{identifier: string, replacement: string}> */
-    private const STATIC_HOOKS = [
+    private const array STATIC_HOOKS = [
         'beforeAll' => [
             'identifier' => PestDiagnosticIdentifiers::LIFECYCLE_BEFORE_ALL_THIS_USAGE,
             'replacement' => 'beforeEach',

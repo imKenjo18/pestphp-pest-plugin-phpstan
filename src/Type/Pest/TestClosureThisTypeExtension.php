@@ -17,13 +17,13 @@ use PHPUnit\Framework\TestCase;
 
 final class TestClosureThisTypeExtension implements FunctionParameterClosureThisExtension
 {
-    private const PEST_TEST_FUNCTIONS = [
+    private const array PEST_TEST_FUNCTIONS = [
         'it',
         'test',
         'describe',
     ];
 
-    private const PEST_HOOK_FUNCTIONS = [
+    private const array PEST_HOOK_FUNCTIONS = [
         'beforeEach',
         'afterEach',
         'beforeAll',
