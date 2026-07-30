@@ -13,7 +13,7 @@ use PHPStan\Analyser\IgnoreErrorExtension;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 
-final class ArchExpectationNotPropertyIgnoreExtension implements IgnoreErrorExtension
+final class ArchExpectationPropertyIgnoreExtension implements IgnoreErrorExtension
 {
     public function shouldIgnore(Error $error, Node $node, Scope $scope): bool
     {
@@ -25,7 +25,7 @@ final class ArchExpectationNotPropertyIgnoreExtension implements IgnoreErrorExte
             return false;
         }
 
-        if (! $node->name instanceof Identifier || $node->name->name !== 'not') {
+        if (! $node->name instanceof Identifier || ! in_array($node->name->name, ExpectationPropertiesExtension::KNOWN_EXPECTATION_PROPERTIES, true)) {
             return false;
         }
 

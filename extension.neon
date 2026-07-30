@@ -70,7 +70,7 @@ services:
             - phpstan.ignoreErrorExtension
 
     -
-        class: Pest\PHPStan\Type\Pest\ArchExpectationNotPropertyIgnoreExtension
+        class: Pest\PHPStan\Type\Pest\ArchExpectationPropertyIgnoreExtension
         tags:
             - phpstan.ignoreErrorExtension
 
