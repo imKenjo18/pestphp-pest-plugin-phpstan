@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\PHPStan\Type\Pest;
 
+use Pest\Arch\Contracts\ArchExpectation;
 use Pest\Expectation;
 use Pest\Expectations\HigherOrderExpectation;
 use PHPStan\Reflection\ClassReflection;
@@ -18,6 +19,10 @@ final class ExpectationPropertiesExtension implements PropertiesClassReflectionE
 
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {
+        if ($classReflection->is(ArchExpectation::class) && $propertyName === 'not' && ! $classReflection->hasNativeProperty($propertyName)) {
+            return true;
+        }
+
         if ($classReflection->is(Expectation::class)) {
             return ! in_array($propertyName, self::KNOWN_EXPECTATION_PROPERTIES, true)
                 && ! $classReflection->hasNativeProperty($propertyName);
@@ -32,6 +37,13 @@ final class ExpectationPropertiesExtension implements PropertiesClassReflectionE
 
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
+        if ($classReflection->is(ArchExpectation::class) && $propertyName === 'not') {
+            return new PestTestCaseProperty(
+                $classReflection,
+                ArchExpectationTypeResolver::getNotPropertyType($classReflection),
+            );
+        }
+
         return new PestTestCaseProperty($classReflection, new MixedType);
     }
 }

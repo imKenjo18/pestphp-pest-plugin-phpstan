@@ -109,3 +109,38 @@ function testToBeInvokable(): void
     $result = expect('App\Actions')->toBeInvokable();
     assertType(ArchExpectation::class, $result);
 }
+function testNotOnArchExpectation(): void
+{
+    $result = expect('App')->toUseStrictTypes()->not;
+    assertType("Pest\Expectations\OppositeExpectation<'App'>", $result);
+}
+
+function testNotArchExpectationChainToUse(): void
+{
+    $result = expect('App')->toUseStrictTypes()->not->toUse(['dd', 'dump']);
+    assertType(ArchExpectation::class, $result);
+}
+
+function testNotArchExpectationChainToBeFinal(): void
+{
+    $result = expect('App')->toUseStrictTypes()->not->toBeFinal();
+    assertType(ArchExpectation::class, $result);
+}
+
+function testNotArchExpectationChainToImplement(): void
+{
+    $result = expect('App')->toUseStrictTypes()->not->toImplement('SomeInterface');
+    assertType(ArchExpectation::class, $result);
+}
+
+function testNotOnExpectDirectly(): void
+{
+    $result = expect('App')->not->toUse(['dd', 'dump']);
+    assertType(ArchExpectation::class, $result);
+}
+
+function testNotOnArchExpectationArrayTarget(): void
+{
+    $result = expect(['App\Models', 'App\Services'])->toUseStrictTypes()->not;
+    assertType('Pest\Expectations\OppositeExpectation<array{\'App\\\\Models\', \'App\\\\Services\'}>', $result);
+}

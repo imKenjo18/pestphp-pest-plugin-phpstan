@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\PHPStan\Type\Pest;
 
+use Pest\Arch\Contracts\ArchExpectation;
 use Pest\Expectation;
 use Pest\Expectations\HigherOrderExpectation;
 use Pest\Expectations\OppositeExpectation;
@@ -15,6 +16,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ExpressionTypeResolverExtension;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
@@ -49,6 +51,15 @@ final class HigherOrderExpectationTypeExtension implements ExpressionTypeResolve
         $propertyName = $expr->name->name;
         $varType = $scope->getType($expr->var);
 
+        if ($propertyName === 'not') {
+            $archType = new ObjectType(ArchExpectation::class);
+            if ($archType->isSuperTypeOf($varType)->yes()) {
+                $valueType = $this->extractTValueFromArchExpectationChain($expr, $scope);
+
+                return new GenericObjectType(OppositeExpectation::class, [$valueType]);
+            }
+        }
+
         $expectationType = new ObjectType(Expectation::class);
         if ($expectationType->isSuperTypeOf($varType)->yes()) {
             return $this->resolveExpectationPropertyFetch($varType, $propertyName, $scope);
@@ -60,6 +71,20 @@ final class HigherOrderExpectationTypeExtension implements ExpressionTypeResolve
         }
 
         return null;
+    }
+
+    private function extractTValueFromArchExpectationChain(PropertyFetch $expr, Scope $scope): Type
+    {
+        if ($expr->var instanceof MethodCall) {
+            $originalType = $scope->getType($expr->var->var);
+            $tValue = $originalType->getTemplateType(Expectation::class, 'TValue');
+
+            if (! $tValue instanceof MixedType) {
+                return $tValue;
+            }
+        }
+
+        return new ObjectType('string');
     }
 
     private function resolveExpectationPropertyFetch(Type $varType, string $propertyName, Scope $scope): ?Type
