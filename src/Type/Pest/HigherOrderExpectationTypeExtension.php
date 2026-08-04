@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\MissingPropertyFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ExpressionTypeResolverExtension;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -187,7 +188,11 @@ final class HigherOrderExpectationTypeExtension implements ExpressionTypeResolve
             return null;
         }
 
-        return $objectType->getProperty($propertyName, $scope)->getReadableType();
+        try {
+            return $objectType->getProperty($propertyName, $scope)->getReadableType();
+        } catch (MissingPropertyFromReflectionException) {
+            return new MixedType;
+        }
     }
 
     private function isNativeExpectationProperty(string $propertyName): bool
