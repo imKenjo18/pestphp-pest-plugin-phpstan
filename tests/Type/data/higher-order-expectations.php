@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HigherOrderExpectations;
 
+use Tests\Type\Fixtures\MagicPropertyObject;
 use Tests\Type\Fixtures\Post;
 
 use function PHPStan\Testing\assertType;
@@ -106,4 +107,26 @@ function testPropertyChainAfterAssertionReset(): void
         ->title->toBe('Hello')
         ->author;
     assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\Post>, Tests\Type\Fixtures\Author>', $result);
+}
+
+function testMagicPropertyDoesNotCrash(): void
+{
+    $object = new MagicPropertyObject;
+    $result = expect($object)->name;
+    assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\MagicPropertyObject>, mixed>', $result);
+}
+
+function testMagicPropertyChainDoesNotCrash(): void
+{
+    $object = new MagicPropertyObject;
+    $result = expect($object)->name->toBe('Nuno');
+    assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\MagicPropertyObject>, Tests\Type\Fixtures\MagicPropertyObject>', $result);
+}
+
+function testUnionWithoutClassPropertyDoesNotCrash(): void
+{
+    /** @var array<string, mixed>|object|null $payload */
+    $payload = null;
+    $result = expect($payload)->currentUser;
+    assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<array<string, mixed>|object|null>, mixed>', $result);
 }
