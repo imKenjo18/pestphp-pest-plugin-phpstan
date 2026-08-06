@@ -248,6 +248,33 @@ function testVarThisAnnotationDoesNotOverridePropertyType(): void
     });
 }
 
+function testBeforeEachArrowFunctionAssignment(): void
+{
+    beforeEach(fn () => $this->arrowPost = new Post);
+
+    it('resolves property type from an arrow function beforeEach', function (): void {
+        assertType(Post::class, $this->arrowPost);
+    });
+}
+
+function testBeforeEachArrowFunctionStringLiteral(): void
+{
+    beforeEach(fn () => $this->arrowName = 'test');
+
+    it('resolves string type from an arrow function beforeEach', function (): void {
+        assertType("'test'", $this->arrowName);
+    });
+}
+
+function testBeforeEachArrowFunctionNonAssignmentStaysMixed(): void
+{
+    beforeEach(fn () => someFunction());
+
+    it('returns mixed when an arrow function beforeEach does not assign a property', function (): void {
+        assertType('mixed', $this->neverAssigned);
+    });
+}
+
 function testBeforeEachSelfReferentialProperty(): void
 {
     beforeEach(function (): void {

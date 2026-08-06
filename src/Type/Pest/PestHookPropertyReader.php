@@ -7,6 +7,7 @@ namespace Pest\PHPStan\Type\Pest;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -18,6 +19,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 
 final class PestHookPropertyReader
@@ -136,7 +138,7 @@ final class PestHookPropertyReader
             }
 
             foreach ($methodCall->getArgs() as $arg) {
-                if (! $arg->value instanceof Closure) {
+                if (! $arg->value instanceof Closure && ! $arg->value instanceof ArrowFunction) {
                     continue;
                 }
 
@@ -249,7 +251,7 @@ final class PestHookPropertyReader
             }
 
             foreach ($funcCall->getArgs() as $arg) {
-                if (! $arg->value instanceof Closure) {
+                if (! $arg->value instanceof Closure && ! $arg->value instanceof ArrowFunction) {
                     continue;
                 }
 
@@ -267,17 +269,18 @@ final class PestHookPropertyReader
      * @param  array<string, string>  $useMap
      * @return array<string, list<Expr>>
      */
-    private function extractPropertyAssignments(Closure $closure, array $useMap): array
+    private function extractPropertyAssignments(Closure|ArrowFunction $closure, array $useMap): array
     {
         $properties = [];
         $localVarMap = $this->buildLocalVarExprMap($closure, $useMap);
 
-        foreach ($closure->stmts as $stmt) {
-            if (! $stmt instanceof Expression) {
-                continue;
-            }
+        foreach ($closure->getStmts() as $stmt) {
+            $expr = match (true) {
+                $stmt instanceof Expression => $stmt->expr,
+                $stmt instanceof Return_ => $stmt->expr,
+                default => null,
+            };
 
-            $expr = $stmt->expr;
             if (! $expr instanceof Assign) {
                 continue;
             }
@@ -335,11 +338,11 @@ final class PestHookPropertyReader
      * @param  array<string, string>  $useMap
      * @return array<string, Expr>
      */
-    private function buildLocalVarExprMap(Closure $closure, array $useMap): array
+    private function buildLocalVarExprMap(Closure|ArrowFunction $closure, array $useMap): array
     {
         $map = [];
 
-        foreach ($closure->stmts as $stmt) {
+        foreach ($closure->getStmts() as $stmt) {
             if (! $stmt instanceof Expression) {
                 continue;
             }
