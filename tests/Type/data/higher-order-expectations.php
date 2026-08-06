@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HigherOrderExpectations;
 
 use Tests\Type\Fixtures\MagicPropertyObject;
+use Tests\Type\Fixtures\NonFinalObject;
 use Tests\Type\Fixtures\Post;
 
 use function PHPStan\Testing\assertType;
@@ -121,6 +122,24 @@ function testMagicPropertyChainDoesNotCrash(): void
     $object = new MagicPropertyObject;
     $result = expect($object)->name->toBe('Nuno');
     assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\MagicPropertyObject>, Tests\Type\Fixtures\MagicPropertyObject>', $result);
+}
+
+function testNonFinalClassMissingPropertyDoesNotCrash(NonFinalObject $object): void
+{
+    $result = expect($object)->name;
+    assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\NonFinalObject>, mixed>', $result);
+}
+
+function testNonFinalClassMissingPropertyChainDoesNotCrash(NonFinalObject $object): void
+{
+    $result = expect($object)->name->toBe('Nuno');
+    assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\NonFinalObject>, Tests\Type\Fixtures\NonFinalObject>', $result);
+}
+
+function testNonFinalClassRealPropertyStillResolves(NonFinalObject $object): void
+{
+    $result = expect($object)->title;
+    assertType('Pest\Expectations\HigherOrderExpectation<Pest\Expectation<Tests\Type\Fixtures\NonFinalObject>, string>', $result);
 }
 
 function testUnionWithoutClassPropertyDoesNotCrash(): void
