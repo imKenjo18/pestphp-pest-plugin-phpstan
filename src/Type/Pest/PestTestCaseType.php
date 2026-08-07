@@ -19,43 +19,60 @@ final class PestTestCaseType
 
     public function resolve(string $filePath): Type
     {
-        $types = $this->toClassObjectTypes(
-            $this->pestConfigReader->resolveFileBindings($filePath),
-        );
+        $bindings = $this->pestConfigReader->resolveFileBindings($filePath);
 
-        if ($types === []) {
-            $types = $this->toClassObjectTypes(
-                $this->pestConfigReader->resolveBindings($filePath),
-            );
+        if ($bindings === []) {
+            $bindings = $this->pestConfigReader->resolveBindings($filePath);
         }
 
-        if ($types === []) {
-            return new ObjectType(TestCase::class);
-        }
-
-        return count($types) === 1 ? $types[0] : TypeCombinator::intersect(...$types);
-    }
-
-    /**
-     * @param  list<string>  $bindings
-     * @return list<ObjectType>
-     */
-    private function toClassObjectTypes(array $bindings): array
-    {
-        $types = [];
+        $classNames = [];
+        $traitNames = [];
 
         foreach ($bindings as $binding) {
             if (! $this->reflectionProvider->hasClass($binding)) {
                 continue;
             }
 
-            if ($this->reflectionProvider->getClass($binding)->isTrait()) {
+            $reflection = $this->reflectionProvider->getClass($binding);
+
+            if ($reflection->isTrait()) {
+                $traitNames[] = $binding;
+
                 continue;
             }
 
-            $types[] = new ObjectType($binding);
+            $classNames[] = $binding;
         }
 
-        return $types;
+        if ($classNames === []) {
+            $classNames[] = TestCase::class;
+        }
+
+        $classType = $this->toObjectType($classNames);
+
+        if ($traitNames === []) {
+            return $classType;
+        }
+
+        return new PestTestCaseWithTraitsType(
+            $classNames[0],
+            $traitNames,
+            $this->reflectionProvider,
+        );
+    }
+
+    /**
+     * @param  list<string>  $classNames
+     */
+    private function toObjectType(array $classNames): Type
+    {
+        if (count($classNames) === 1) {
+            return new ObjectType($classNames[0]);
+        }
+
+        return TypeCombinator::intersect(...array_map(
+            static fn (string $className): ObjectType => new ObjectType($className),
+            $classNames,
+        ));
     }
 }
