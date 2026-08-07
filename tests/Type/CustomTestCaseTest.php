@@ -8,12 +8,14 @@ test('custom testcase closure types', function (string $assertType, string $file
     $this->assertFileAsserts($assertType, $file, ...$args);
 })->with(function (): Iterator {
     yield from CustomTestCaseTestCase::gatherAssertTypes(__DIR__.'/../Fixtures/CustomTestCaseInference/Feature/test-closures-custom-testcase.php');
+    yield from CustomTestCaseTestCase::gatherAssertTypes(__DIR__.'/../Fixtures/CustomTestCaseInference/Feature/test-with-closures-custom-testcase.php');
 });
 
 test('custom testcase closure types when a class and a trait are bound', function (string $assertType, string $file, mixed ...$args): void {
     $this->assertFileAsserts($assertType, $file, ...$args);
 })->with(function (): Iterator {
     yield from CustomTestCaseTestCase::gatherAssertTypes(__DIR__.'/../Fixtures/CustomTestCaseInference/WithTrait/with-trait-testcase.php');
+    yield from CustomTestCaseTestCase::gatherAssertTypes(__DIR__.'/../Fixtures/CustomTestCaseInference/WithTrait/with-trait-method-call.php');
 });
 
 test('custom testcase closure types from file-level uses()', function (string $assertType, string $file, mixed ...$args): void {

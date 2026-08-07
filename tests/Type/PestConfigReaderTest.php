@@ -78,6 +78,22 @@ test('returns empty for unmatched path', function () use ($makeReader): void {
     expect($bindings)->toBeEmpty();
 });
 
+test('resolves global bindings without in() scope to every file', function (): void {
+    $fixtureDir = realpath(__DIR__.'/Fixtures/pestconfig-global');
+    if ($fixtureDir === false) {
+        throw new RuntimeException('Global fixtures directory not found.');
+    }
+
+    $reader = new PestConfigReader(new PestFileDiscoverer([$fixtureDir]));
+
+    expect($reader->resolveBindings($fixtureDir.'/Feature/SomeTest.php'))
+        ->toContain(CustomTestCase::class)
+        ->toContain(HelperTrait::class)
+        ->and($reader->resolveBindings('/some/other/path/Test.php'))
+        ->toContain(CustomTestCase::class)
+        ->toContain(HelperTrait::class);
+});
+
 test('resolves in() directories built from __DIR__', function (): void {
     $fixtureDir = realpath(__DIR__.'/Fixtures/pestconfig-magicdir');
     if ($fixtureDir === false) {

@@ -42,9 +42,22 @@ services:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
+        class: Pest\PHPStan\Type\Pest\PestTestCaseType
+
+    -
         class: Pest\PHPStan\Type\Pest\TestClosureThisTypeExtension
         tags:
             - phpstan.functionParameterClosureThisExtension
+
+    -
+        class: Pest\PHPStan\Type\Pest\WithClosureThisTypeExtension
+        tags:
+            - phpstan.methodParameterClosureThisExtension
+
+    -
+        class: Pest\PHPStan\Type\Pest\WithDatasetClosureNodeVisitor
+        tags:
+            - phpstan.parser.richParserNodeVisitor
 
     -
         class: Pest\PHPStan\Type\Pest\ExpectationPropertiesExtension

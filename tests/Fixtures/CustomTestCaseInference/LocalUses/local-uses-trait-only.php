@@ -10,9 +10,10 @@ use function PHPStan\Testing\assertType;
 
 uses(HelperTrait::class);
 
-function testThisTypeFallsBackToTestCaseWhenOnlyATraitIsUsed(): void
+function testThisTypeWhenOnlyATraitIsUsed(): void
 {
-    it('falls back to the default TestCase $this when only a trait is used', function (): void {
+    it('falls back to the default TestCase $this and exposes trait methods', function (): void {
         assertType(\PHPUnit\Framework\TestCase::class, $this);
+        assertType('string', $this->helperMethod());
     });
 }

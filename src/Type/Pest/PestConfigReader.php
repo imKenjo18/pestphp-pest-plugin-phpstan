@@ -24,6 +24,9 @@ final class PestConfigReader
     /** @var array<string, list<array{class: string, config: string}>> */
     private array $globalUseDirectoryMap = [];
 
+    /** @var list<string> Bindings declared in a Pest.php config without an ->in() scope */
+    private array $globalBindings = [];
+
     /** @var array<string, list<string>> Caches bindings declared directly inside a test file */
     private array $fileBindingsCache = [];
 
@@ -45,7 +48,7 @@ final class PestConfigReader
         $this->ensureParsed();
 
         $normalizedFile = $this->fileDiscoverer->normalizePath($filePath);
-        $bindings = [];
+        $bindings = [...$this->globalBindings];
 
         foreach ($this->directoryMap as $bindingKey => $classNames) {
             if (! $this->targetResolver->matches($bindingKey, $normalizedFile)) {
@@ -120,7 +123,7 @@ final class PestConfigReader
     {
         $this->ensureParsed();
 
-        $bindings = [];
+        $bindings = [...$this->globalBindings];
 
         foreach ($this->directoryMap as $classNames) {
             array_push($bindings, ...$classNames);
@@ -158,6 +161,27 @@ final class PestConfigReader
 
         $this->extractUsesBindings($nodeFinder, $stmts, $pestFileDir, $filePath);
         $this->extractPestBindings($nodeFinder, $stmts, $pestFileDir, $filePath);
+        $this->extractGlobalBindings($stmts);
+    }
+
+    /**
+     * @param  Node[]  $stmts
+     */
+    private function extractGlobalBindings(array $stmts): void
+    {
+        foreach ($this->topLevelExpressions($stmts) as $expr) {
+            $usesArgs = $this->extractFileUsesArgs($expr);
+            if ($usesArgs !== []) {
+                array_push($this->globalBindings, ...$usesArgs);
+
+                continue;
+            }
+
+            $pestArgs = $this->extractFilePestArgs($expr);
+            if ($pestArgs !== []) {
+                array_push($this->globalBindings, ...$pestArgs);
+            }
+        }
     }
 
     /**
