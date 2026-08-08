@@ -19,29 +19,16 @@ final class PestTestCaseType
 
     public function resolve(string $filePath): Type
     {
-        $bindings = $this->pestConfigReader->resolveFileBindings($filePath);
+        [$classNames, $traitNames] = $this->partition(
+            $this->pestConfigReader->resolveFileBindings($filePath),
+        );
 
-        if ($bindings === []) {
-            $bindings = $this->pestConfigReader->resolveBindings($filePath);
-        }
+        if ($classNames === []) {
+            [$classNames, $directoryTraitNames] = $this->partition(
+                $this->pestConfigReader->resolveBindings($filePath),
+            );
 
-        $classNames = [];
-        $traitNames = [];
-
-        foreach ($bindings as $binding) {
-            if (! $this->reflectionProvider->hasClass($binding)) {
-                continue;
-            }
-
-            $reflection = $this->reflectionProvider->getClass($binding);
-
-            if ($reflection->isTrait()) {
-                $traitNames[] = $binding;
-
-                continue;
-            }
-
-            $classNames[] = $binding;
+            $traitNames = array_values(array_unique([...$directoryTraitNames, ...$traitNames]));
         }
 
         if ($classNames === []) {
@@ -59,6 +46,32 @@ final class PestTestCaseType
             $traitNames,
             $this->reflectionProvider,
         );
+    }
+
+    /**
+     * @param  list<string>  $bindings
+     * @return array{list<class-string>, list<class-string>}
+     */
+    private function partition(array $bindings): array
+    {
+        $classNames = [];
+        $traitNames = [];
+
+        foreach ($bindings as $binding) {
+            if (! $this->reflectionProvider->hasClass($binding)) {
+                continue;
+            }
+
+            if ($this->reflectionProvider->getClass($binding)->isTrait()) {
+                $traitNames[] = $binding;
+
+                continue;
+            }
+
+            $classNames[] = $binding;
+        }
+
+        return [$classNames, $traitNames];
     }
 
     /**

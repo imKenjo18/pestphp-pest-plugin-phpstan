@@ -33,3 +33,9 @@ test('file-level uses() overrides the directory binding', function (string $asse
 })->with(function (): Iterator {
     yield from CustomTestCaseTestCase::gatherAssertTypes(__DIR__.'/../Fixtures/CustomTestCaseInference/Feature/local-uses-overrides-directory.php');
 });
+
+test('a trait-only file-level uses() keeps the directory binding', function (string $assertType, string $file, mixed ...$args): void {
+    $this->assertFileAsserts($assertType, $file, ...$args);
+})->with(function (): Iterator {
+    yield from CustomTestCaseTestCase::gatherAssertTypes(__DIR__.'/../Fixtures/CustomTestCaseInference/Feature/local-uses-trait-only-keeps-directory-testcase.php');
+});
