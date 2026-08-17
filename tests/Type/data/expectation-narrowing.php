@@ -181,3 +181,30 @@ function testToEqualNarrowsLoosely(): void
     expect($value)->toEqual(null);
     assertType("''|null", $value);
 }
+
+function testNotFollowedByAndRebindDoesNotLeakNegation(): void
+{
+    /** @var string|null $a */
+    $a = random_int(0, 1) === 1 ? 'a' : null;
+    /** @var int|string $b */
+    $b = random_int(0, 1) === 1 ? 1 : 'x';
+    expect($a)->not->toBeNull()->and($b)->toBeInt();
+    assertType('string', $a);
+    assertType('int', $b);
+}
+
+function testDoubleNegationCancelsOut(): void
+{
+    /** @var string|null $value */
+    $value = random_int(0, 1) === 1 ? 'a' : null;
+    expect($value)->not->not->toBeNull();
+    assertType('null', $value);
+}
+
+function testToBeWithNoArgumentsDoesNotNarrow(): void
+{
+    /** @var int|string $value */
+    $value = random_int(0, 1) === 1 ? 1 : 'a';
+    expect($value)->toBe();
+    assertType('int|string', $value);
+}
