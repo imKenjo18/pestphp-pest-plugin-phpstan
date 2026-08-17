@@ -149,3 +149,35 @@ function testNotToBeStringOnUnion(): void
     expect($value)->not->toBeString();
     assertType('int', $value);
 }
+
+function testToBeNarrowsToTheComparedConstant(): void
+{
+    /** @var int|string $value */
+    $value = random_int(0, 1) === 1 ? 1 : 'a';
+    expect($value)->toBe(1);
+    assertType('1', $value);
+}
+
+function testToBeNarrowsToTheComparedExpressionType(): void
+{
+    $value = random_int(0, 1) === 1 ? new RuntimeException('x') : 'a';
+    $expected = new RuntimeException('x');
+    expect($value)->toBe($expected);
+    assertType('RuntimeException', $value);
+}
+
+function testNotToBeRemovesTheConstant(): void
+{
+    /** @var 'a'|'b' $value */
+    $value = 'a';
+    expect($value)->not->toBe('a');
+    assertType("'b'", $value);
+}
+
+function testToEqualNarrowsLoosely(): void
+{
+    /** @var string|null $value */
+    $value = random_int(0, 1) === 1 ? 'a' : null;
+    expect($value)->toEqual(null);
+    assertType("''|null", $value);
+}

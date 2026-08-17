@@ -24,6 +24,9 @@ final class ExpectationNarrowingResolver
 
     private const array PASSTHROUGH_METHODS = ['when', 'unless', 'sequence', 'match', 'ray'];
 
+    /** @var array<string, bool> Matcher name => uses loose (==) comparison */
+    private const array COMPARISON_METHODS = ['toBe' => false, 'toEqual' => true];
+
     public function __construct(
         private readonly ExpectationMatcherRegistry $matcherRegistry,
     ) {}
@@ -89,6 +92,17 @@ final class ExpectationNarrowingResolver
 
             if (! method_exists(MixinsExpectation::class, $methodName)) {
                 return $narrowings;
+            }
+
+            if (isset(self::COMPARISON_METHODS[$methodName])) {
+                $compared = $link->getArgs()[0]->value ?? null;
+                if ($compared instanceof Expr) {
+                    $narrowings[] = ExpectationNarrowing::comparison($subject, $compared, self::COMPARISON_METHODS[$methodName], $negated);
+                }
+
+                $negated = false;
+
+                continue;
             }
 
             $assertedType = $this->matcherRegistry->assertedTypeFor($methodName, $link, $scope);
