@@ -110,3 +110,42 @@ function testAssignedExpectationAlsoNarrowsTheSubject(): void
     assertType('Pest\Expectation<int>', $expectation);
     assertType('int', $value);
 }
+
+function testNotToBeNullRemovesNull(): void
+{
+    /** @var string|null $value */
+    $value = random_int(0, 1) === 1 ? 'a' : null;
+    expect($value)->not->toBeNull();
+    assertType('string', $value);
+}
+
+function testNotMethodRemovesNull(): void
+{
+    /** @var string|null $value */
+    $value = random_int(0, 1) === 1 ? 'a' : null;
+    expect($value)->not()->toBeNull();
+    assertType('string', $value);
+}
+
+function testNotAppliesToOneMatcherOnly(): void
+{
+    /** @var string|null $value */
+    $value = random_int(0, 1) === 1 ? 'a' : null;
+    expect($value)->not->toBeNull()->toBeString();
+    assertType('string', $value);
+}
+
+function testNotToBeInstanceOfRemovesTheClass(): void
+{
+    $value = random_int(0, 1) === 1 ? new RuntimeException('x') : 'a';
+    expect($value)->not->toBeInstanceOf(RuntimeException::class);
+    assertType("'a'", $value);
+}
+
+function testNotToBeStringOnUnion(): void
+{
+    /** @var int|string $value */
+    $value = random_int(0, 1) === 1 ? 1 : 'a';
+    expect($value)->not->toBeString();
+    assertType('int', $value);
+}

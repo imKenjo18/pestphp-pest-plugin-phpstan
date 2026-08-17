@@ -20,6 +20,8 @@ final class ExpectationNarrowingResolver
 {
     private const string REBIND_METHOD = 'and';
 
+    private const string NEGATE_METHOD = 'not';
+
     private const array PASSTHROUGH_METHODS = ['when', 'unless', 'sequence', 'match', 'ray'];
 
     public function __construct(
@@ -45,9 +47,18 @@ final class ExpectationNarrowingResolver
         }
 
         $narrowings = [];
+        $negated = false;
 
         foreach (array_reverse($links) as $link) {
             if ($link instanceof PropertyFetch) {
+                /** @var Identifier $name */
+                $name = $link->name;
+                if ($name->name === self::NEGATE_METHOD) {
+                    $negated = ! $negated;
+
+                    continue;
+                }
+
                 return $narrowings;
             }
 
@@ -55,11 +66,19 @@ final class ExpectationNarrowingResolver
             $name = $link->name;
             $methodName = $name->name;
 
+            if ($methodName === self::NEGATE_METHOD && $link->getArgs() === []) {
+                $negated = ! $negated;
+
+                continue;
+            }
+
             if ($methodName === self::REBIND_METHOD) {
                 $subject = $link->getArgs()[0]->value ?? null;
                 if (! $subject instanceof Expr) {
                     return $narrowings;
                 }
+
+                $negated = false;
 
                 continue;
             }
@@ -74,8 +93,10 @@ final class ExpectationNarrowingResolver
 
             $assertedType = $this->matcherRegistry->assertedTypeFor($methodName, $link, $scope);
             if ($assertedType instanceof Type) {
-                $narrowings[] = ExpectationNarrowing::type($subject, $assertedType);
+                $narrowings[] = ExpectationNarrowing::type($subject, $assertedType, $negated);
             }
+
+            $negated = false;
         }
 
         return $narrowings;

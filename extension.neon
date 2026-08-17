@@ -44,6 +44,13 @@ services:
             - phpstan.typeSpecifier.methodTypeSpecifyingExtension
 
     -
+        class: Pest\PHPStan\Type\Pest\ExpectationTypeSpecifyingExtension
+        arguments:
+            className: Pest\Expectations\OppositeExpectation
+        tags:
+            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
+
+    -
         class: Pest\PHPStan\Type\Pest\PestFunctionReturnTypeExtension
         tags:
             - phpstan.broker.dynamicFunctionReturnTypeExtension
