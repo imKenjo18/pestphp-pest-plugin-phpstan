@@ -26,7 +26,7 @@
     "require": {
         "php": "^8.4",
         "pestphp/pest": "^5.0.0",
-        "phpstan/phpstan": "^2.2.5"
+        "phpstan/phpstan": "^2.2.7"
     },
     "require-dev": {
         "laravel/pao": "^1.1.2",
