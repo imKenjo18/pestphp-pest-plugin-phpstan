@@ -333,8 +333,6 @@ final class PestHookPropertyReader
     }
 
     /**
-     * Builds a map of local variable name to RHS Expr, respecting @var doc comments.
-     *
      * @param  array<string, string>  $useMap
      * @return array<string, Expr>
      */
@@ -343,9 +341,7 @@ final class PestHookPropertyReader
         $map = [];
 
         foreach ($hook->getStmts() as $stmt) {
-            // Arrow functions yield a single synthetic Return_ statement here. Their body
-            // can never hold a prior local-variable assignment, so they are deliberately
-            // skipped below — do not add Return_ handling.
+            // @note: arrow functions yield one synthetic Return_ statement — no local vars can precede it.
             if (! $stmt instanceof Expression) {
                 continue;
             }
