@@ -229,11 +229,11 @@ function testNotToBeInstanceOfWithMultipleClassStringsDoesNotNarrow(): void
     assertType('LogicException|RuntimeException|string', $value);
 }
 
-function testToBeInstanceOfWithClassStringVariableNarrowsToObject(): void
+function testToBeInstanceOfWithClassStringVariableNarrowsPrecisely(): void
 {
     /** @var RuntimeException|string $value */
     $value = random_int(0, 1) === 1 ? new RuntimeException('x') : 'a';
-    /** @var class-string $class Positive narrowing may over-approximate to any object and stay sound */
+    /** @var class-string $class Resolves to a constant string here, so narrowing is exact */
     $class = RuntimeException::class;
     expect($value)->toBeInstanceOf($class);
     assertType('RuntimeException', $value);

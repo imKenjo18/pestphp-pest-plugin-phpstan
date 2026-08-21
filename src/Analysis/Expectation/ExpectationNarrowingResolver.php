@@ -24,7 +24,7 @@ final class ExpectationNarrowingResolver
 
     private const string NEGATE_METHOD = 'not';
 
-    private const array PASSTHROUGH_METHODS = ['when', 'unless', 'sequence', 'match', 'ray'];
+    private const array PASSTHROUGH_METHODS = ['when', 'unless', 'sequence', 'ray'];
 
     /** @var array<string, bool> Matcher name => uses loose (==) comparison */
     private const array COMPARISON_METHODS = ['toBe' => false, 'toEqual' => true];

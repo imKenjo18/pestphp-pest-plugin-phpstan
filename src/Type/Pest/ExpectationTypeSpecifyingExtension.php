@@ -50,7 +50,7 @@ final class ExpectationTypeSpecifyingExtension implements MethodTypeSpecifyingEx
         $specifiedTypes = new SpecifiedTypes;
 
         foreach ($this->narrowingResolver->resolve($node, $scope) as $narrowing) {
-            $context = $narrowing->negated
+            $narrowingContext = $narrowing->negated
                 ? TypeSpecifierContext::createTruthy()->negate()
                 : TypeSpecifierContext::createTruthy();
 
@@ -60,7 +60,7 @@ final class ExpectationTypeSpecifyingExtension implements MethodTypeSpecifyingEx
                     : new Identical($narrowing->subject, $narrowing->comparedExpr);
 
                 $specifiedTypes = $specifiedTypes->unionWith(
-                    $this->typeSpecifier->specifyTypesInCondition($scope, $comparison, $context),
+                    $this->typeSpecifier->specifyTypesInCondition($scope, $comparison, $narrowingContext),
                 );
 
                 continue;
@@ -73,7 +73,7 @@ final class ExpectationTypeSpecifyingExtension implements MethodTypeSpecifyingEx
             $specifiedTypes = $specifiedTypes->unionWith($this->typeSpecifier->create(
                 $narrowing->subject,
                 $narrowing->assertedType,
-                $context,
+                $narrowingContext,
                 $scope,
             ));
         }
