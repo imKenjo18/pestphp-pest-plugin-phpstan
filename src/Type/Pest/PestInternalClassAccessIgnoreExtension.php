@@ -17,6 +17,7 @@ final class PestInternalClassAccessIgnoreExtension implements IgnoreErrorExtensi
         'property.internalClass',
         'method.internalClass',
         'method.internalTrait',
+        'method.internalInterface',
     ];
 
     public function shouldIgnore(Error $error, Node $node, Scope $scope): bool
