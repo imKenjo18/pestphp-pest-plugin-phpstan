@@ -3,6 +3,8 @@ parameters:
         - PHPUnit\Framework\TestCase
     scanDirectories:
         - src
+    stubFiles:
+        - stubs/DescribeCall.stub
 
 services:
     -
