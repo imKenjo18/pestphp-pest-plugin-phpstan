@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Pest\PendingCalls;
+
+/**
+ * @mixin \Pest\PendingCalls\BeforeEachCall
+ */
+final class DescribeCall
+{
+}
