@@ -62,12 +62,6 @@ test('hook property types', function (string $assertType, string $file, mixed ..
     yield from TestCase::gatherAssertTypes(__DIR__.'/data/test-hook-properties.php');
 });
 
-test('expectation instance narrowing types', function (string $assertType, string $file, mixed ...$args): void {
-    $this->assertFileAsserts($assertType, $file, ...$args);
-})->with(function (): Iterator {
-    yield from TestCase::gatherAssertTypes(__DIR__.'/data/expectation-instance-narrowing.php');
-});
-
 test('expectation chain subject narrowing types', function (string $assertType, string $file, mixed ...$args): void {
     $this->assertFileAsserts($assertType, $file, ...$args);
 })->with(function (): Iterator {

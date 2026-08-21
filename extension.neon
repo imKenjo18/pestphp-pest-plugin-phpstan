@@ -66,11 +66,6 @@ services:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
-        class: Pest\PHPStan\Type\Pest\ExpectationInstanceTypeSpecifyingExtension
-        tags:
-            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
-
-    -
         class: Pest\PHPStan\Type\Pest\OppositeExpectationMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
