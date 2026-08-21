@@ -43,6 +43,16 @@ function testMultipleDistinctSubjectsEachNarrowedInSameChain(): void
         ->and(assertType(Author::class, $items[1]));
 }
 
+function testMemberAccessOnNarrowedDimFetchSubjectResolves(): void
+{
+    $items = items();
+
+    expect($items)->toHaveCount(1)
+        ->and($items[0])->toBeInstanceOf(Post::class)
+        ->and(assertType('string', $items[0]->title))
+        ->and(assertType(Author::class, $items[0]->author));
+}
+
 function testUsageBeforeALaterInstanceofStepStaysUnnarrowed(): void
 {
     $items = items();
