@@ -266,15 +266,16 @@ final class PestHookPropertyReader
     }
 
     /**
+     * @param  Closure|ArrowFunction  $hook
      * @param  array<string, string>  $useMap
      * @return array<string, list<Expr>>
      */
-    private function extractPropertyAssignments(Closure|ArrowFunction $closure, array $useMap): array
+    private function extractPropertyAssignments(Closure|ArrowFunction $hook, array $useMap): array
     {
         $properties = [];
-        $localVarMap = $this->buildLocalVarExprMap($closure, $useMap);
+        $localVarMap = $this->buildLocalVarExprMap($hook, $useMap);
 
-        foreach ($closure->getStmts() as $stmt) {
+        foreach ($hook->getStmts() as $stmt) {
             $expr = match (true) {
                 $stmt instanceof Expression => $stmt->expr,
                 $stmt instanceof Return_ => $stmt->expr,
@@ -335,14 +336,18 @@ final class PestHookPropertyReader
     /**
      * Builds a map of local variable name to RHS Expr, respecting @var doc comments.
      *
+     * @param  Closure|ArrowFunction  $hook
      * @param  array<string, string>  $useMap
      * @return array<string, Expr>
      */
-    private function buildLocalVarExprMap(Closure|ArrowFunction $closure, array $useMap): array
+    private function buildLocalVarExprMap(Closure|ArrowFunction $hook, array $useMap): array
     {
         $map = [];
 
-        foreach ($closure->getStmts() as $stmt) {
+        foreach ($hook->getStmts() as $stmt) {
+            // Arrow functions yield a single synthetic Return_ statement here. Their body
+            // can never hold a prior local-variable assignment, so they are deliberately
+            // skipped below — do not add Return_ handling.
             if (! $stmt instanceof Expression) {
                 continue;
             }

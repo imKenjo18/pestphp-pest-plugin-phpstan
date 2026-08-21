@@ -275,6 +275,15 @@ function testBeforeEachArrowFunctionNonAssignmentStaysMixed(): void
     });
 }
 
+function testBeforeEachNestedArrowFunctionStaysMixed(): void
+{
+    beforeEach(fn () => fn () => $this->nestedArrow = new Post);
+
+    it('returns mixed when an arrow function beforeEach returns another arrow function', function (): void {
+        assertType('mixed', $this->nestedArrow);
+    });
+}
+
 function testBeforeEachSelfReferentialProperty(): void
 {
     beforeEach(function (): void {
