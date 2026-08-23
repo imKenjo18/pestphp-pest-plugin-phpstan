@@ -144,39 +144,19 @@ it('unrelated class hierarchies never match', function (): void {
     expect(new Post)->toBeInstanceOf(RuntimeException::class);
 });
 
-it('mixed can be a string', function (): void {
+it('mixed can be anything', function (): void {
     /** @var mixed $value */
     $value = null;
     expect($value)->toBeString();
-});
-
-it('mixed can be an int', function (): void {
-    /** @var mixed $value */
-    $value = null;
     expect($value)->toBeInt();
-});
-
-it('mixed can be an array', function (): void {
-    /** @var mixed $value */
-    $value = null;
     expect($value)->toBeArray();
-});
-
-it('mixed can be an instance', function (): void {
-    /** @var mixed $value */
-    $value = null;
     expect($value)->toBeInstanceOf(stdClass::class);
 });
 
-it('union may match the string branch', function (): void {
+it('unions may match either branch', function (): void {
     /** @var int|string $value */
     $value = 1;
     expect($value)->toBeString();
-});
-
-it('union may match the int branch', function (): void {
-    /** @var int|string $value */
-    $value = 1;
     expect($value)->toBeInt();
 });
 
@@ -184,11 +164,6 @@ it('nullable may be null', function (): void {
     /** @var string|null $value */
     $value = null;
     expect($value)->toBeNull();
-});
-
-it('nullable may be a string', function (): void {
-    /** @var string|null $value */
-    $value = null;
     expect($value)->toBeString();
 });
 

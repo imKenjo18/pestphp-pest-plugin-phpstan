@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pest\PHPStan\Analysis\Expectation;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
@@ -13,7 +12,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -82,8 +80,6 @@ final class MatcherAssertionRegistry
         'toBeResource' => self::RESOURCE,
     ];
 
-    private const string INSTANCE_OF_PARAMETER = 'class';
-
     /** @var array<string, Type> */
     private array $staticAssertedTypeCache = [];
 
@@ -150,43 +146,26 @@ final class MatcherAssertionRegistry
         return $assertedType;
     }
 
-    /** @return bool True when the asserted type mirrors the matcher exactly, so it may also be removed */
-    public function assertsExactTypeFor(string $methodName, MethodCall $methodCall, Scope $scope): bool
-    {
-        if ($this->assertionFor($methodName) !== self::INSTANCE_OF) {
-            return true;
-        }
-
-        return count($this->constantClassNames($methodCall, $scope)) === 1;
-    }
-
     private function resolveToBeInstanceOf(MethodCall $methodCall, Scope $scope): Type
     {
-        $classNames = $this->constantClassNames($methodCall, $scope);
+        $args = $methodCall->getArgs();
 
-        if ($classNames === []) {
+        if ($args === []) {
             return new ObjectWithoutClassType;
         }
 
-        $objectTypes = array_map(
-            static fn (ConstantStringType $name): ObjectType => new ObjectType($name->getValue()),
-            $classNames
-        );
+        $classType = $scope->getType($args[0]->value);
+        $classNames = $classType->getConstantStrings();
 
-        return TypeCombinator::union(...$objectTypes);
-    }
+        if ($classNames !== []) {
+            $objectTypes = array_map(
+                static fn ($name): ObjectType => new ObjectType($name->getValue()),
+                $classNames
+            );
 
-    /**
-     * @return list<ConstantStringType>
-     */
-    private function constantClassNames(MethodCall $methodCall, Scope $scope): array
-    {
-        $class = MatcherArgument::first($methodCall, self::INSTANCE_OF_PARAMETER);
-
-        if (! $class instanceof Expr) {
-            return [];
+            return TypeCombinator::union(...$objectTypes);
         }
 
-        return $scope->getType($class)->getConstantStrings();
+        return new ObjectWithoutClassType;
     }
 }

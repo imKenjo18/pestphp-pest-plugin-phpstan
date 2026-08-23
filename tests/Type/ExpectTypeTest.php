@@ -97,9 +97,3 @@ test('exhaustive hook property types', function (string $assertType, string $fil
 })->with(function (): Iterator {
     yield from TestCase::gatherAssertTypes(__DIR__.'/data/test-hook-properties-exhaustive.php');
 });
-
-test('expectation narrowing types', function (string $assertType, string $file, mixed ...$args): void {
-    $this->assertFileAsserts($assertType, $file, ...$args);
-})->with(function (): Iterator {
-    yield from TestCase::gatherAssertTypes(__DIR__.'/data/expectation-narrowing.php');
-});

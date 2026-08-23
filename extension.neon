@@ -29,30 +29,6 @@ services:
         class: Pest\PHPStan\Analysis\Expectation\ExpectationSemanticAnalyzer
 
     -
-        class: Pest\PHPStan\Analysis\Expectation\ExpectationNarrowingResolver
-
-    -
-        class: Pest\PHPStan\Type\Pest\ExpectationTypeSpecifyingExtension
-        arguments:
-            className: Pest\Expectation
-        tags:
-            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
-
-    -
-        class: Pest\PHPStan\Type\Pest\ExpectationTypeSpecifyingExtension
-        arguments:
-            className: Pest\Mixins\Expectation
-        tags:
-            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
-
-    -
-        class: Pest\PHPStan\Type\Pest\ExpectationTypeSpecifyingExtension
-        arguments:
-            className: Pest\Expectations\OppositeExpectation
-        tags:
-            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
-
-    -
         class: Pest\PHPStan\Type\Pest\PestFunctionReturnTypeExtension
         tags:
             - phpstan.broker.dynamicFunctionReturnTypeExtension

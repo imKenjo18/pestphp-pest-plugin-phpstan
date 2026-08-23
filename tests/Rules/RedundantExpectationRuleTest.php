@@ -127,18 +127,6 @@ test('redundant semantic chains avoid duplicate diagnostics', function (): void 
     ]);
 });
 
-test('redundancy is reported across separate expect() statements', function (): void {
-    $this->analyse([
-        __DIR__.'/data/redundant-expectation-cross-statement.php',
-    ], [
-        [
-            'Calling toBeInt() on Expectation<int>; assertion is redundant.',
-            8,
-            'The expectation value is already guaranteed to satisfy toBeInt().',
-        ],
-    ]);
-});
-
 test('every redundant matcher combination is reported without false positives', function (): void {
     $this->analyse([
         __DIR__.'/data/redundant-expectation-exhaustive.php',
