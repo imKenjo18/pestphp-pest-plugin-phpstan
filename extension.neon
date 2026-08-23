@@ -17,9 +17,6 @@ services:
         class: Pest\PHPStan\Type\Pest\PestConfigReader
 
     -
-        class: Pest\PHPStan\Analysis\Expectation\ExpectationChainSubjectResolver
-
-    -
         class: Pest\PHPStan\Analysis\Expectation\ExpectationMatcherRegistry
 
     -
@@ -103,11 +100,6 @@ services:
 
     -
         class: Pest\PHPStan\Type\Pest\HigherOrderExpectationTypeExtension
-        tags:
-            - phpstan.broker.expressionTypeResolverExtension
-
-    -
-        class: Pest\PHPStan\Type\Pest\ExpectationChainSubjectNarrowingExtension
         tags:
             - phpstan.broker.expressionTypeResolverExtension
 
