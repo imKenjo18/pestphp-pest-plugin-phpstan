@@ -50,6 +50,29 @@ final class PestTestCaseType
 
     /**
      * @param  list<string>  $bindings
+     */
+    public function resolveFromBindings(array $bindings): ?Type
+    {
+        // @note: returns null when no class is bound, so callers can fall back to file based resolution.
+        [$classNames, $traitNames] = $this->partition($bindings);
+
+        if ($classNames === []) {
+            return null;
+        }
+
+        if ($traitNames === []) {
+            return $this->toObjectType($classNames);
+        }
+
+        return new PestTestCaseWithTraitsType(
+            $classNames[0],
+            $traitNames,
+            $this->reflectionProvider,
+        );
+    }
+
+    /**
+     * @param  list<string>  $bindings
      * @return array{list<class-string>, list<class-string>}
      */
     private function partition(array $bindings): array

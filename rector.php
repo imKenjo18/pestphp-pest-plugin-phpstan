@@ -18,6 +18,7 @@ return RectorConfig::configure()
         __DIR__.'/tests/Type/data',
         __DIR__.'/tests/Rules/data',
         __DIR__.'/tests/Fixtures/CustomTestCaseInference',
+        __DIR__.'/tests/Fixtures/UsesHookClosureThis',
         UsesToExtendRector::class => [
             __DIR__.'/tests/Type/Fixtures/pestconfig-matrix/Pest.php',
         ],
