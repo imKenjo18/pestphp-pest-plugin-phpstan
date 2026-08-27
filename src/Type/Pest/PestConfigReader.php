@@ -119,6 +119,22 @@ final class PestConfigReader
     /**
      * @return list<string>
      */
+    public function resolveChainBindings(Expr $expr): array
+    {
+        // @note: collects the extend()/use() bindings of a single uses()/pest() chain, ignoring any in() targets in between.
+        $bindings = $this->resolveUsesClassNames($expr);
+
+        $pestBindings = $this->resolvePestClassNames($expr);
+        if ($pestBindings !== null) {
+            array_push($bindings, ...$pestBindings['extend'], ...$pestBindings['use']);
+        }
+
+        return array_values(array_unique($bindings));
+    }
+
+    /**
+     * @return list<string>
+     */
     public function allBoundClasses(): array
     {
         $this->ensureParsed();

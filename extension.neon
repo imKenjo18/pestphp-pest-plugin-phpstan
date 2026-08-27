@@ -57,6 +57,11 @@ services:
             - phpstan.methodParameterClosureThisExtension
 
     -
+        class: Pest\PHPStan\Type\Pest\UsesHookClosureThisTypeExtension
+        tags:
+            - phpstan.methodParameterClosureThisExtension
+
+    -
         class: Pest\PHPStan\Type\Pest\WithDatasetClosureNodeVisitor
         tags:
             - phpstan.parser.richParserNodeVisitor
