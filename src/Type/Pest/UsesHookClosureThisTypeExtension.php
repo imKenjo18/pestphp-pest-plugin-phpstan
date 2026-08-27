@@ -14,11 +14,10 @@ use PHPStan\Type\Type;
 
 final class UsesHookClosureThisTypeExtension implements MethodParameterClosureThisExtension
 {
-    private const array PEST_HOOK_METHODS = [
+    // @note: beforeAll/afterAll are absent on purpose — Testable chains them through ChainableClosure::boundStatically(), which binds null, so $this does not exist in them at runtime.
+    private const array PEST_EACH_HOOK_METHODS = [
         'beforeeach',
         'aftereach',
-        'beforeall',
-        'afterall',
     ];
 
     public function __construct(
@@ -28,7 +27,7 @@ final class UsesHookClosureThisTypeExtension implements MethodParameterClosureTh
 
     public function isMethodSupported(MethodReflection $methodReflection, ParameterReflection $parameter): bool
     {
-        return in_array(mb_strtolower($methodReflection->getName()), self::PEST_HOOK_METHODS, true)
+        return in_array(mb_strtolower($methodReflection->getName()), self::PEST_EACH_HOOK_METHODS, true)
             && $methodReflection->getDeclaringClass()->is(UsesCall::class);
     }
 

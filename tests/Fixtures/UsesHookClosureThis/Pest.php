@@ -35,3 +35,13 @@ pest()->extend(HookTestCase::class, HelperTrait::class)
         assertType('string', $this->helperMethod());
     })
     ->in('WithTrait');
+
+// @note: beforeAll/afterAll are bound statically by Pest, so $this must stay unresolved in them.
+pest()->extend(HookTestCase::class)
+    ->beforeAll(function (): void {
+        assertType('*ERROR*', $this);
+    })
+    ->afterAll(function (): void {
+        assertType('*ERROR*', $this);
+    })
+    ->in('StaticHooks');
